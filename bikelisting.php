@@ -27,7 +27,7 @@
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
                     <!-- Navbar link-->
-                    <a class="nav-link text-primary"><b>Home</b></a>
+                    <a class="nav-link">Home</a>
               </li>
               <li class="nav-item">
                     <!-- Navbar link-->
@@ -40,84 +40,94 @@
       </nav>
     </header>
 
-    <!-- Hero section-->
-    <section class="hero-home py-5">
+    <!-- search section-->
+    <section class="py-5 text-center container">
+      <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+          <h1 class="fw-light">Bike Listing's</h1>
+          <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+          <p>
+            <a href="#" class="btn btn-primary my-2">Main call to action</a>
+            <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+          </p>
+        </div>
+      </div>
+    </section>
 
-      <div class="container pt-5">
-        <div class="row">
-          <div class="col-lg-5">
-            <p class="h6 text-uppercase text-primary mb-3">Online Marketplace to buy & Sell Bikes</p>
-            <h1 class="mb-5">Welcome to Takoko ! Your one stop shop for all your bike needs.</h1>
-            <div class="pb-5">
-            <form class="p-2 rounded shadow-sm bg-white" action="#">
-              <div class="input-group">
-                <!-- dropdown -->
-                <div class="p-2">
-                <select name="cars" id="cars">
-                  <option value="volvo">Bike S/N</option>
-                  <option value="saab">Bike Name</option>
-                </select>
-                </div>
-                <!-- dropdown -->
-                <input class="form-control border-0 mr-2" type="search" placeholder="Search for your dream bike...">
-                <div class="input-group-append rounded">
-                  <button class="btn btn-primary rounded" type="submit">
-                    <img src="<?php echo (IMG_PATH . 'magnifying-glass.png') ?>" width='25px' style='padding: 1px;' />
-                  </button>
-                </div>
-              </div>
-            </form>
+    <!-- listing section-->
+    <section>
+      <div class="album py-5 bg-light">
+        <div class="container">
+            <div class="py-lg-5">
+            <?php
+            //feed bike listing data here
+            $totalBikeListing = 3;
+            //if listing is 0, display no results
+            if($totalBikeListing === 0) {
+              echo '<h4 class="text-center py-lg-5">No bike listings available at the current moment...</h4>';
+            }
+            //otherwise render listing
+            else {
+              function renderBoxes($listLen) {
+                 $finalOutput = "";
+                 for ($x = 1; $x < $listLen + 1; $x++) {
+                   //format each box
+                   $title = "$x - title of bike listing";
+                   $description = 'enter the description here.';
+                   $price = "10.00";
+                   $eachBox =
+                   "
+                    <div class='col'>
+                      <div class='card shadow-sm'>
+
+                        <svg 
+                          class='bd-placeholder-img card-img-top'
+                          width='100%'
+                          height='225'
+                          role='img' aria-label='Placeholder: Thumbnail'
+                          preserveAspectRatio='xMidYMid slice'
+                          focusable='false'><title>Placeholder</title><rect width='100%'
+                          height='100%'
+                          fill='#55595c'
+                        />
+                        <text x='50%' y='50%' fill='#eceeef' dy='.3em'>Thumbnail</text>
+                        </svg>
+
+                        <div class='card-body'>
+                          <h5>$title</h5>
+                          <p class='card-text'>$description</p>
+
+                          <div class='d-flex justify-content-between align-items-center'>
+                            <div class='btn-group'>
+                              <button type='button' class='btn btn-sm btn-outline-secondary'>View Detail</button>
+                            </div>
+                            <p class='text-dark'>\$ $price</p>
+                          </div>
+
+                         </div>
+
+                      </div>
+                    </div>
+                    ";
+                    //append each box into final output
+                    $finalOutput .= $eachBox;
+                 }
+                 return $finalOutput;
+              }
+              //start of listing
+              echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">';
+              //render boxes here
+              echo renderBoxes($totalBikeListing);
+              echo '</div>';
+            }
+            ?>
             </div>
-          </div>
-
-          <div class="col-lg-7">
-             <img 
-            src="<?php echo (IMG_PATH . 'mainpage-bicycle.jpg') ?>"
-            class="d-block mx-lg-auto img-fluid"
-            alt="online bike marketplace"
-            width="500"
-            height="500"
-            loading="lazy">
           </div>
         </div>
       </div>
     </section>
-    <!-- Features section-->
-    <section class="py-5" style="margin-top: -5em;">
-      <div class="container py-5">
-        <div class="row text-center">
-          <div class="col-lg-10 mx-auto">
-            <div class="card border-0 shadow">
-              <div class="card-body p-5">
-                <div class="row">
-                  <div class="col-lg-4 mb-4 mb-lg-0">
-                        <span class="mb-3 text-primary">
-                         <img src="<?php echo (IMG_PATH . 'bicycle.png') ?>" width='50px' style='padding-bottom: 3em;' />
-                        </span>
-                    <h2 class="h5">Search Bike's Easily</h2>
-                    <p class="text-muted text-small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
-                  </div>
-                  <div class="col-lg-4 mb-4 mb-lg-0">
-                         <span class="mb-3 text-primary">
-                          <img src="<?php echo (IMG_PATH . 'info.png') ?>" width='50px' style='padding-bottom: 3em;' />
-                        </span>
-                    <h2 class="h5">Provide Info's Easily</h2>
-                    <p class="text-muted text-small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
-                  </div>
-                  <div class="col-lg-4">
-                         <span class="mb-3 text-primary">
-                          <img src="<?php echo (IMG_PATH . 'list.png') ?>" width='50px' style='padding-bottom: 3em;' />
-                        </span>
-                    <h2 class="h5">List Bike's Easily</h2>
-                    <p class="text-muted text-small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+
+
 
     <footer style="background: #111;">
       <div class="container py-4">
