@@ -61,7 +61,7 @@
             <div class="py-lg-5">
             <?php
             //feed bike listing data here
-            $totalBikeListing = 3;
+            $totalBikeListing = 4;
             //if listing is 0, display no results
             if($totalBikeListing === 0) {
               echo '<h4 class="text-center py-lg-5">No bike listings available at the current moment...</h4>';
@@ -72,28 +72,25 @@
                  $finalOutput = "";
                  for ($x = 1; $x < $listLen + 1; $x++) {
                    //format each box
+                   $bikeID = 'bike id here';
                    $title = "$x - title of bike listing";
                    $description = 'enter the description here.';
-                   $price = "10.00";
+                   $price = $x . "0.00";
+                   $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
                    $eachBox =
                    "
-                    <div class='col'>
+                    <div class='col pb-4'>
                       <div class='card shadow-sm'>
 
-                        <svg 
-                          class='bd-placeholder-img card-img-top'
+                        <img 
+                          class='bd-placeholder-img card-img-top p-4'
                           width='100%'
                           height='225'
-                          role='img' aria-label='Placeholder: Thumbnail'
-                          preserveAspectRatio='xMidYMid slice'
-                          focusable='false'><title>Placeholder</title><rect width='100%'
-                          height='100%'
-                          fill='#55595c'
+                          src='$imgURL'
                         />
-                        <text x='50%' y='50%' fill='#eceeef' dy='.3em'>Thumbnail</text>
-                        </svg>
 
                         <div class='card-body'>
+                          <small>$bikeID</small>
                           <h5>$title</h5>
                           <p class='card-text'>$description</p>
 
