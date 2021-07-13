@@ -1,3 +1,9 @@
+<?php
+  define('BS_CSSPATH', 'css/'); //define bootstrap css path
+  define('IMG_PATH','./img/'); //define img path
+  $bootstrap_css = 'bootstrap.min.css'; //bootstrap_css filename
+?>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -8,7 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<?php echo (BS_CSSPATH . "$bootstrap_css"); ?>" type="text/css">
     <!-- Google fonts-->
     <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Work+Sans:300,400,700&amp;display=swap"> -->
     <!-- Owl carousel2-->
@@ -48,85 +54,16 @@
         </div>
       </nav>
     </header>
-    <!--  Modal -->
-    <div class="modal fade" id="listingModal" tabindex="-1" role="dialog" aria-labelledby="listingModal" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header px-lg-5">
-            <h5 class="modal-title" id="listingModalLabel">Add Listing</h5>
-            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-          </div>
-          <div class="modal-body px-lg-5">
-            <form action="#">
-              <div class="row">
-                <div class="form-group col-lg-6">
-                  <label for="fullName">Full name</label>
-                  <input class="form-control form-control-lg" id="fullName" type="text" name="fullname" placeholder="Your full name">
-                </div>
-                <div class="form-group col-lg-6">
-                  <label for="email">Email Address</label>
-                  <input class="form-control form-control-lg" id="email" type="email" name="email" placeholder="Your email address">
-                </div>
-                <div class="form-group col-lg-6">
-                  <label for="fullName">Listing Type</label>
-                  <select class="selectpicker" id="listingType" name="listing-type" data-style="bs-select-form-control" data-title="What do you want to add" data-width="100%" required>
-                    <option value="tool">Tool</option>
-                    <option value="resource">Resource</option>
-                  </select>
-                </div>
-                <div class="form-group col-lg-6">
-                  <label for="istingTitle">Listing title</label>
-                  <input class="form-control form-control-lg" id="istingTitle" type="text" name="listing-title" placeholder="Title of your title">
-                </div>
-                <div class="form-group col-lg-6">
-                  <label for="listingUrl">Listing URL</label>
-                  <input class="form-control form-control-lg" id="listingUrl" type="text" name="listing-url" placeholder="Listing website url">
-                </div>
-                <div class="form-group col-lg-6">
-                  <label for="listingCategory">Listing category</label>
-                  <select class="selectpicker" id="listingCategory" name="listing-category" data-style="bs-select-form-control" data-title="Select listing category" data-width="100%" required>
-                    <option value="">Marketing</option>
-                    <option value="">Idea generation</option>
-                    <option value="">Idea generation</option>
-                    <option value="">Design</option>
-                    <option value="">Naming</option>
-                    <option value="">Domain names</option>
-                    <option value="">Sales</option>
-                    <option value="">Finance</option>
-                    <option value="">Project management</option>
-                    <option value="">Hosting</option>
-                    <option value="">Social tools</option>
-                  </select>
-                </div>
-                <div class="form-group col-lg-12">
-                  <label for="listingDescription">Listing description</label>
-                  <textarea class="form-control form-control-lg" id="listingDescription" name="listing-description" rows="5" placeholder="Add a small brief about your listing."></textarea>
-                </div>
-                <div class="form-group col-lg-6 mb-lg-0">
-                  <label for="listingThumb">Listing thumbnail</label>
-                  <input class="form-control form-control-lg-2" id="listingThumb" type="file" name="listing-thumb">
-                </div>
-                <div class="form-group col-lg-6 mb-lg-0">
-                  <label for="listingCover">Listing cover</label>
-                  <input class="form-control form-control-lg-2" id="listingCover" type="file" name="listing-cover">
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer justify-content-start px-lg-5">
-            <button class="btn btn-primary" type="submit">Submit listing</button>
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Hero section-->
     <section class="hero-home py-5">
+
       <div class="container pt-5">
         <div class="row">
-          <div class="col-lg-7 mx-auto text-center">
+          <div class="col-lg-5">
             <p class="h6 text-uppercase text-primary mb-3">Online Marketplace to buy & Sell Bikes</p>
             <h1 class="mb-5">Welcome to Takoko ! Your one stop shop for all your bike needs.</h1>
+            <div class="pb-5">
             <form class="p-2 rounded shadow-sm bg-white" action="#">
               <div class="input-group">
                 <!-- dropdown -->
@@ -139,16 +76,29 @@
                 <!-- dropdown -->
                 <input class="form-control border-0 mr-2" type="search" placeholder="Search for your dream bike...">
                 <div class="input-group-append rounded">
-                  <button class="btn btn-primary rounded" type="submit"><i class="fas fa-search"></i></button>
+                  <button class="btn btn-primary rounded" type="submit">
+                    <img src="<?php echo (IMG_PATH . 'magnifying-glass.png') ?>" width='25px' style='padding: 1px;' />
+                  </button>
                 </div>
               </div>
             </form>
+            </div>
+          </div>
+
+          <div class="col-lg-7">
+             <img 
+            src="<?php echo (IMG_PATH . 'mainpage-bicycle.jpg') ?>"
+            class="d-block mx-lg-auto img-fluid"
+            alt="online bike marketplace"
+            width="500"
+            height="500"
+            loading="lazy">
           </div>
         </div>
       </div>
     </section>
     <!-- Features section-->
-    <section class="py-5">
+    <section class="py-5" style="margin-top: -5em;">
       <div class="container py-5">
         <div class="row text-center">
           <div class="col-lg-10 mx-auto">
@@ -157,21 +107,21 @@
                 <div class="row">
                   <div class="col-lg-4 mb-4 mb-lg-0">
                         <span class="mb-3 text-primary">
-                          <i class="fab fa-searchengin fa-10x"></i>
+                         <img src="<?php echo (IMG_PATH . 'bicycle.png') ?>" width='50px' style='padding-bottom: 3em;' />
                         </span>
                     <h2 class="h5">Search Bike's Easily</h2>
                     <p class="text-muted text-small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
                   </div>
                   <div class="col-lg-4 mb-4 mb-lg-0">
                          <span class="mb-3 text-primary">
-                          <i class="fas fa-info-circle fa-10x"></i>
+                          <img src="<?php echo (IMG_PATH . 'info.png') ?>" width='50px' style='padding-bottom: 3em;' />
                         </span>
                     <h2 class="h5">Provide Info's Easily</h2>
                     <p class="text-muted text-small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
                   </div>
                   <div class="col-lg-4">
                          <span class="mb-3 text-primary">
-                          <i class="fas fa-money-bill-wave fa-10x"></i>
+                          <img src="<?php echo (IMG_PATH . 'list.png') ?>" width='50px' style='padding-bottom: 3em;' />
                         </span>
                     <h2 class="h5">List Bike's Easily</h2>
                     <p class="text-muted text-small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod.</p>
@@ -233,6 +183,7 @@
     <script src="js/front.js"></script> -->
 
     <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="<?php echo (BS_CSSPATH . '$bs_icon_css'); ?>" type="text/css">
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"> -->
   </body>
 </html>
