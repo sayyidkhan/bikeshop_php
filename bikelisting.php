@@ -4,6 +4,15 @@
   $bootstrap_css = 'bootstrap.min.css'; //bootstrap_css filename
 ?>
 
+<style>
+.scrollfeature {
+    height: 500px;
+    width: 300px;
+    overflow: auto;
+    margin-left: -5px;
+}
+</style>
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -59,9 +68,10 @@
       <div class="album py-5 bg-light">
         <div class="container">
             <div class="py-lg-5">
+            <div>
             <?php
             //feed bike listing data here
-            $totalBikeListing = 4;
+            $totalBikeListing = 12;
             //if listing is 0, display no results
             if($totalBikeListing === 0) {
               echo '<h4 class="text-center py-lg-5">No bike listings available at the current moment...</h4>';
@@ -111,11 +121,28 @@
                  }
                  return $finalOutput;
               }
-              //start of listing
-              echo '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">';
-              //render boxes here
-              echo renderBoxes($totalBikeListing);
+
+              //start of HTML script
+              echo '<div class="row">';
+
+              // current listing's //
+              echo '<div class="col-5">';
+              echo '<div class="mb-5"><h3>Selected Bike</h3></div>';
+              echo '<h5>No bike selected yet...</h5>';
               echo '</div>';
+              // bike listing's //
+
+              // bike listing's //
+              echo '<div class="col-7 scrollfeature">';
+              echo '<div class="mb-5"><h3>Available Listing\'s</h3></div>';
+              echo '  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-2">';
+              echo renderBoxes($totalBikeListing);
+              echo '  </div>';
+              echo '</div>';
+              // bike listing's //
+
+              echo '</div>';
+              //end of HTML script
             }
             ?>
             </div>
