@@ -22,9 +22,9 @@
           <h1>Takoko</h1>
           <div id="nav">
             <ul>
-              <li><a href="">Home</a></li>
+              <li><a href="index.php">Home</a></li>
               <li><a href="">Manage Listing</a></li>
-              <li><a href="">View Listing's</a></li>
+              <li><a href="bikelisting.php">View Listing's</a></li>
             </ul>
           </div>
         </div>

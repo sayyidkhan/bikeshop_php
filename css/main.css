@@ -77,6 +77,13 @@ li {
   background-color: #adb5bd;
 }
 
+.bgteritarycolor1 {
+  /* https://cssgradient.io/ */
+  color: white;
+  background: rgb(1,198,246);
+  background: linear-gradient(90deg, rgba(1,198,246,1) 0%, rgba(7,58,154,1) 26%, rgba(6,81,169,1) 45%, rgba(0,212,255,1) 100%);
+}
+
 
 .center-text {
   text-align: center;
@@ -84,6 +91,10 @@ li {
 
 .text-leftalign {
   text-align: left;
+}
+
+.samerow {
+  display: inline;
 }
 
 
