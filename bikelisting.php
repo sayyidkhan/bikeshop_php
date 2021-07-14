@@ -65,17 +65,109 @@
               }
               else {
                 function expressInterestForm($currentID) {
+                    function persistData($name,$phone,$email,$expectedprice,$currentID) {
+
+                    }
+                    //button
+                    $disabled = "";
+                    $disabledColor = "bgprimarycolor";
+                    $successMsg = "";
+                    //err variables
+                    $nameErr = "";
+                    $emailErr = "";
+                    $phoneErr = "";
+                    $expectedPriceErr = "";
+
+                    //variables to store into textfile
+                    $name = null;
+                    $phone = null;
+                    $email = null;
+                    $expectedPrice = null;
+
+                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                        function cleanInput($data) {
+                          $data = trim($data);
+                          $data = stripslashes($data);
+                          $data = htmlspecialchars($data);
+                          return $data;
+                        }
+                         //name validation
+                         if (empty($_POST["name"])) {
+                            $nameErr = "Name is required";
+                         } 
+                         else {
+                            $name = cleanInput($_POST["name"]);
+                            //if there is any digit throw error
+                            $pattern = "/\d+/";
+                            if (preg_match($pattern , $name) > 0) {
+                              $nameErr = "Invalid name format";
+                            }
+                         }
+                         //phone validation
+                         if (empty($_POST["phone"])) {
+                            $phoneErr = "phone is required";
+                         } 
+                         else {
+                            $phone = cleanInput($_POST["phone"]);
+                            //if there is any string throw error
+                            $pattern = "/[a-zA-Z]+/";
+                            if (preg_match($pattern , $phone) > 0) {
+                              $phoneErr = "Invalid phone format";
+                            }
+                         }
+                        //email validation
+                        if (empty($_POST["email"])) {
+                          $emailErr = "Email is required";
+                        } else {
+                          $email = cleanInput($_POST["email"]);
+                          // check if e-mail address is well-formed
+                          if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                            $emailErr = "Invalid email format";
+                          }
+                        }
+                        //price validation
+                        if (empty($_POST["expectedPrice"])) {
+                          $expectedPriceErr = "Price is required";
+                        } else {
+                          $expectedPrice = cleanInput($_POST["expectedPrice"]);
+                          // check for number, if value is lesser than 1, then it is not numeric
+                          if(!is_numeric($expectedPrice)) {
+                             $expectedPriceErr = "Invalid price format";
+                          }
+                        }
+
+                        //if all validation is successful - all fields are blank, then save data
+                        if($nameErr === $emailErr && $phoneErr === $expectedPriceErr) {
+                            $disabledColor = "";
+                            $disabled = 'disabled';
+                            $successMsg = 'You have successfully submitted!';
+                        }
+                    }
+
                     $eachBox = 
                     "
                     <div>
                       <h6>Express Interest For Purchase:</h6>
 
-                      <form>
-                        <input class='inputstyling' type='text' name='name'  placeholder='your name...'><br>
-                        <input class='inputstyling' type='text' name='phone' placeholder='your phonenumber...'><br>
-                        <input class='inputstyling' type='text' name='email' placeholder='your email...'><br>
-                        <input class='inputstyling' type='number' name='expectedprice' placeholder='your expected price...'><br>
-                        <button class='bgprimarycolor' style='height: 2em; width: 8em;'>Submit</button>
+                      <p class='required-text' style='float: left;'>* required field</p><br>
+                      <form method='post' accept-charset='utf-8'>
+                        <input class='inputstyling' type='text' name='name'  placeholder='your name...' value='$name'>
+                        <span class='required-text'>* ${nameErr}</span><br>
+                        <input class='inputstyling' type='text' name='phone' placeholder='your phonenumber...' value='$phone'>
+                        <span class='required-text'>* ${phoneErr}</span><br>
+                        <input class='inputstyling' type='text' name='email' placeholder='your email...' value='$email'>
+                        <span class='required-text'>* ${emailErr}</span><br>
+                        <input class='inputstyling' type='string' name='expectedPrice' placeholder='your expected price...' value='$expectedPrice'>
+                        <span class='required-text'>* ${expectedPriceErr}</span><br>
+                        <button
+                         $disabled
+                         type='submit'
+                         class='$disabledColor'
+                         style='height: 2em; width: 8em;'
+                         >
+                         Submit
+                         </button>
+                         <span class='required-text' style='color: green;'>$successMsg</span>
                       </form>
                     </div>
                     ";
@@ -86,7 +178,7 @@
                       $peopleInterested = 2;
                       $title = "$x - title of bike listing";
                       $description = 'enter the description here. enter the description here. enter the description here.';
-                      $price = $x . "0.00";
+                      $price = $x . "0";
                       $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
                       $expressInterestForm = expressInterestForm($currentID);
                       $eachBox =
