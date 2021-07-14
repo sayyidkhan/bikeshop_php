@@ -2,6 +2,10 @@
   display: flex;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .flex-container > div {
   background-color: #f1f1f1;
   margin: 10px;
@@ -16,4 +20,65 @@
 
 .dotted {
   border-style: dotted;
+}
+
+/* bike listing */
+
+.flex-bikelisting-parent {
+  display: grid;
+  grid-auto-flow: row;
+  grid-gap: 10px;
+  grid-template-rows: 405px 405px;
+  grid-template-columns: 405px 405px;
+  padding: 10px;
+  margin: 10px;
+}
+
+.flex-bikelisting-child {
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.bike-img-format {
+    width:380px;
+    height:200px;
+    padding: 4px;
+    border: 1px solid grey;
+}
+
+/* each box text size */
+.bikeid-text {
+    font-size: 16px;
+    line-height: 0.6;
+}
+
+.title-text {
+    font-size: 19px;
+    font-weight: bold;
+    line-height: 0.6;
+}
+
+.price-text {
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 0.8;
+}
+
+.price-text-div {
+    float: right;
+    margin-bottom: 10em;
+    margin-right: 0.5em;
+}
+
+.description-text {
+    font-size: 16px;
+    line-height: 1.2;
+}
+
+/*scroll feature */
+.scrollfeature {
+    height: 800px;
+    width: 880px;
+    overflow: auto;
+    margin-left: -5px;
 }

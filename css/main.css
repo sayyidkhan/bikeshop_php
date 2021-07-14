@@ -73,15 +73,18 @@ li {
 }
 
 .bgsecondarycolor {
-  background-color: #0d6efd;
+  color: white;
+  background-color: #adb5bd;
 }
 
 
+.center-text {
+  text-align: center;
+}
 
-
-
-
-
+.text-leftalign {
+  text-align: left;
+}
 
 
 
