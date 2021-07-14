@@ -45,7 +45,13 @@
         <div id="content">
            <div>
             <h2 class="centerText primarycolor">View Listing's</h2>
-            <h3 class="centerText">Some dummy Text here.</h3>
+            <h3 class="centerText">Search For your favourite bike's here today...</h3>
+            <!-- search query -->
+            <form class="bikesearch boxsizing" action="#" style="margin:auto;max-width:500px;margin-bottom: 2em;">
+              <input class="boxsizing" type="text" placeholder="Search bike serial number..." name="searchBike">
+              <button class="boxsizing" type="submit">search</button>
+            </form>
+            <!-- search query -->
            </div>
         </div>
 
@@ -147,7 +153,7 @@
                     $eachBox = 
                     "
                     <div>
-                      <h6>Express Interest For Purchase:</h6>
+                      <p class='title-text text-leftalign'>Express Interest For Purchase:</p>
 
                       <p class='required-text' style='float: left;'>* required field</p><br>
                       <form method='post' accept-charset='utf-8'>
@@ -174,11 +180,21 @@
                     return $eachBox;
                 }
                 function renderSelectedBicycle($currentID) {
+                      //contact info
+                      $name = 'Jack Sparrow';
+                      $phone = '98765432';
+                      $email = 'email@email.com';
+                      $contactDetails = "$phone , $email";
+                      //bike info
                       $bikeID = $currentID;
+                      $yearofmanufacture = "2017";
                       $peopleInterested = 2;
-                      $title = "$x - title of bike listing";
+                      $condition = "NEW";
+                      $title = "title of bike listing"  . "   " . "[$condition]";
                       $description = 'enter the description here. enter the description here. enter the description here.';
-                      $price = $x . "0";
+                      $type = 'mountain';
+                      $characteristics = 'sunny looking';
+                      $price = "10.00";
                       $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
                       $expressInterestForm = expressInterestForm($currentID);
                       $eachBox =
@@ -188,9 +204,13 @@
                       <div><img src='$imgURL' class='bike-img-format' /></div>
                       
                         <div class='text-leftalign'>
-                          <p class='bikeid-text text-leftalign'>$bikeID</p>
+                          <p class='bikeid-text text-leftalign'>$bikeID <span style='float: right;'>Year Of Manufacture: $yearofmanufacture</span></p>
                           <p class='title-text text-leftalign'>$title</p>
                           <p class='description-text text-leftalign'>$description</p>
+                          <p class='attributes-text text-leftalign'><b>Type: </b> $type</p>
+                          <p class='attributes-text text-leftalign'><b>Characteristics: </b> $characteristics</p>
+                          <p class='attributes-text text-leftalign'><b>Contact Name: </b> $name</p>
+                          <p class='attributes-text text-leftalign'><b>Contact Details: </b> $contactDetails</p>
                         </div>
 
                         
@@ -237,7 +257,8 @@
                   $finalOutput = "";
                   for ($x = 1; $x < $listLen + 1; $x++) {
                       $bikeID = $x . ' - bike id here';
-                      $title = "$x - title of bike listing";
+                      $condition = "NEW";
+                      $title = "$x - title of bike listing" . "   " . "[$condition]";
                       $description = 'enter the description here. enter the description here. enter the description here.';
                       $price = $x . "0.00";
                       $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';

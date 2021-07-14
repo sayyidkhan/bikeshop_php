@@ -86,6 +86,11 @@
     line-height: 1.2;
 }
 
+.attributes-text {
+    font-size: 16px;
+    line-height: 0.4;
+}
+
 .interested-users {
   /* font */
   font-size: 16px;
@@ -98,9 +103,45 @@
   color: white;
 }
 
+/* search box */
+.boxsizing {
+  box-sizing: border-box;
+}
+
+form.bikesearch input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 80%;
+  background: #f1f1f1;
+}
+
+form.bikesearch button {
+  float: left;
+  width: 20%;
+  padding: 10px;
+  background: #2196F3;
+  color: white;
+  font-size: 17px;
+  border: 1px solid grey;
+  border-left: none;
+  cursor: pointer;
+}
+
+form.bikesearch button:hover {
+  background: #0b7dda;
+}
+
+form.bikesearch::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
 /*scroll feature */
 .scrollfeature {
-    height: 800px;
+    height: 850px;
     width: 880px;
     overflow: auto;
     margin-left: -5px;
