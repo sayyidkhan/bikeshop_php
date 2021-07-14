@@ -2,7 +2,9 @@
   define('CSS_PATH', 'css/'); //define bootstrap css path
   define('IMG_PATH','./img/'); //define img path
   $main_css = 'main.css'; // main css filename
+  $flex_css = 'flex.css'; // flex css filename
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -12,6 +14,7 @@
     <title>Takoko - Bike Shop</title>
     <!-- main CSS-->
     <link rel="stylesheet" href='<?php echo (CSS_PATH . "$main_css"); ?>' type="text/css">
+    <link rel="stylesheet" href='<?php echo (CSS_PATH . "$flex_css"); ?>' type="text/css">
 
   </head>
   <body>
@@ -30,26 +33,25 @@
         </div>
 
         <div id="content">
-
            <div>
-            <h3 class="centerText primarycolor">ONLINE MARKETPLACE TO BUY & SELL BIKES</h3>
+            <h3 class="centerText primarycolor">View Listing's</h3>
+            <p class="centerText">Some dummy Text here.</p>
+           </div>
+        </div>
 
-            <div class="container">
-              <img 
-              src="<?php echo (IMG_PATH . 'mainpage-bicycle.jpg') ?>"
-              alt="online bike marketplace"
-              width="500"
-              height="400"
-              loading="lazy">
-            </div>
-
-            <h2 class="centerText">Welcome to Takoko ! Your one stop shop for all your bike needs.</h2>
-
-            <div style="text-align:center; padding-bottom: 2em;">
-              <a href="bikelisting.php"><button class="bgprimarycolor" style="height: 5em; width: 20em;">Visit Listing Today!</button></a>
-            </div>
+        <div 
+        id="listing-dashboard" 
+        class="flex-container"
+        style="max-width: 80%; margin: auto;">
+          <div class="flex-child dotted" >
           </div>
-
+          <!-- start of listing -->
+          <div class="flex-child flex-container">
+            <div>1</div>
+            <div>2</div>
+            <div>3</div>  
+          </div>
+          <!-- end of listing -->
         </div>
 
         <div id="footer">
