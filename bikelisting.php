@@ -1,17 +1,41 @@
 <?php
+  include 'classes/bikelisting.php';
+
   define('CSS_PATH', 'css/'); //define bootstrap css path
   define('IMG_PATH','./img/'); //define img path
   $main_css = 'main.css'; // main css filename
   $flex_css = 'flex.css'; // flex css filename
+
+  define('DB_ExpInterest', 'database/ExpInterest.txt'); //filepath to expinterest.txt
+  define('DB_BikesforSale', 'database/BikesforSale.txt'); //filepath to expinterest.txt
 ?>
 
 <!-- manage global variables -->
 <?php
   $selectedBikeId = null;
-  $bikeListings = null;
-  // 
+  $successInterestSubmit = false;
+
+  //set bike ID
   if (isset($_GET['selectedBikeId'])) {
      $selectedBikeId = $_GET['selectedBikeId'];
+  }
+  //set interest list
+  $ExpInterestList = file(DB_ExpInterest);
+  //set BikesforSale
+  function getBikeListFN($myList) {
+    $result = array();
+    foreach($myList as $lines) {
+        $instance = bikelisting::initUsingFileLines($lines);
+        $sn = $instance->serialnumber;
+        $result[$sn] = $instance;
+    }
+    return $result;
+  }
+  $BikesforSale = file(DB_BikesforSale);
+  $BikesforSale = getBikeListFN($BikesforSale);
+  //if search is performed on the search bike
+  if (isset($_GET['searchBike'])) {
+     // $selectedBikeId = $_GET['searchBike'];
   }
 
 ?>
@@ -71,8 +95,11 @@
               }
               else {
                 function expressInterestForm($currentID) {
-                    function persistData($name,$phone,$email,$expectedprice,$currentID) {
-
+                    //save data into file
+                    function persistData($currentID,$name,$phone,$email,$expectedPrice) {
+                       $ExpInterestFile = fopen(DB_ExpInterest,"ab");
+                       fwrite($ExpInterestFile, "$currentID,$name,$phone,$email,$expectedPrice" . "\n");
+                       fclose($ExpInterestFile);
                     }
                     //button
                     $disabled = "";
@@ -89,6 +116,8 @@
                     $phone = null;
                     $email = null;
                     $expectedPrice = null;
+
+                    
 
                     if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         function cleanInput($data) {
@@ -147,6 +176,10 @@
                             $disabledColor = "";
                             $disabled = 'disabled';
                             $successMsg = 'You have successfully submitted!';
+                            //perform data persistence
+                            persistData($currentID,$name,$phone,$email,$expectedPrice);
+                            //refresh UI to update counter
+                            header("Refresh: 3");
                         }
                     }
 
@@ -180,26 +213,89 @@
                     return $eachBox;
                 }
                 function renderSelectedBicycle($currentID) {
+                      //get data from db
+                      function retireveData($bikeId,$file) {
+                         //get serial number from file
+                         function getSerialNoFromFileArray($file) {
+                              $bikeIdList = array();
+                              foreach ($file as $line) {
+                                  $currentLine = explode(",",$line);
+                                  $bikeID = $currentLine[0];
+                                  array_push($bikeIdList, $bikeID); 
+                              }
+                              return $bikeIdList;
+                          }
+                         //group serial number using associative arrays
+                         function groupSerialNumber($oldList) {
+                            $myNewList = array();
+                              foreach ($oldList as $index) {
+                                  //if key exist - increment the counter
+                                  if(array_key_exists(strval($index), $myNewList)){
+                                      $currentCounter = $myNewList[strval($index)];
+                                      $myNewList[strval($index)] = $currentCounter + 1;
+                                  }
+                                  //else initialise the value
+                                  else {
+                                      $myNewList[strval($index)] = 1; 
+                                  }
+
+                              }
+                              return $myNewList;
+                          }
+                          //find serial key
+                          function findSerialKey($bikeId,$array) {
+                              //if exist return counter
+                              if(array_key_exists($bikeId, $array)) {
+                                return $array[$bikeId];
+                              }
+                              else {
+                                return 0;
+                              }
+                          }
+
+                          //1. get the file directory
+                          $ExpInterestFile = $file;
+                          //2. extract bike id from the file
+                          $bikeIdList = getSerialNoFromFileArray($ExpInterestFile);
+                          //3. group same serial number
+                          $bikeIdList = groupSerialNumber($bikeIdList);
+                          //4. if serialNo in list return noOfPeopleInterested, otherwise return 0
+                          $result = findSerialKey($bikeId,$bikeIdList);
+                          return $result; 
+                      }
+                      function findIdInBikeList($bikeId,$associativeArray) {
+                          $find = $associativeArray[$bikeId];
+                          if($find) {
+                              return $find;
+                          }
+                          else {
+                              return bikeListing::init();
+                          }
+                      }
+                      //extract data from bikeList
+                      $bikeList = $GLOBALS['BikesforSale'];
+                      $bikeInfo = findIdInBikeList($currentID,$bikeList);
+
                       //contact info
-                      $name = 'Jack Sparrow';
-                      $phone = '98765432';
-                      $email = 'email@email.com';
+                      $name = $bikeInfo->name;
+                      $phone = $bikeInfo->phone;
+                      $email = $bikeInfo->email;
                       $contactDetails = "$phone , $email";
                       //bike info
                       $bikeID = $currentID;
-                      $yearofmanufacture = "2017";
-                      $peopleInterested = 2;
-                      $condition = "NEW";
-                      $title = "title of bike listing"  . "   " . "[$condition]";
-                      $description = 'enter the description here. enter the description here. enter the description here.';
-                      $type = 'mountain';
-                      $characteristics = 'sunny looking';
-                      $price = "10.00";
+                      $yearofmanufacture = $bikeInfo->yearofmanufacture;
+                      $peopleInterested = retireveData($bikeID,$GLOBALS['ExpInterestList']);
+                      $condition = $bikeInfo->condition;
+                      $title = "$bikeInfo->title"  . "   " . "[$condition]";
+                      $description = $bikeInfo->description;
+                      $type = $bikeInfo->type;
+                      $characteristics = $bikeInfo->characteristics;
+                      $price = $bikeInfo->price;
                       $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
                       $expressInterestForm = expressInterestForm($currentID);
                       $eachBox =
                       "
-                      <div class='flex-bikelisting-child'>
+                      <div class='flex-bikelisting-child' style='width:450px'>
                       
                       <div><img src='$imgURL' class='bike-img-format' /></div>
                       
@@ -218,6 +314,7 @@
                           <button 
                           name='selectedBikeId'
                           value='$bikeID'
+                          style='margin-top: 0.25em;'
                           class='bgteritarycolor1'
                           style='padding: 0.5em;'
                           disabled
@@ -246,21 +343,20 @@
             <h4>Available Listing's</h4>
             <?php
             //feed bike listing data here
-            $totalBikeListing = 3;
+            $bikeList = $GLOBALS['BikesforSale'];
             //if listing is 0, display no results
-            if($totalBikeListing === 0) {
+            if($bikeList === 0) {
                echo '<h6 class="center-text">No bike listings available at the current moment...</h6>';
             }
             else {
-               function renderBoxes($listLen) {
-                  $bikeListings = $GLOBALS['bikeListings'];
+               function renderBoxes($list) {
                   $finalOutput = "";
-                  for ($x = 1; $x < $listLen + 1; $x++) {
-                      $bikeID = $x . ' - bike id here';
-                      $condition = "NEW";
-                      $title = "$x - title of bike listing" . "   " . "[$condition]";
-                      $description = 'enter the description here. enter the description here. enter the description here.';
-                      $price = $x . "0.00";
+                  foreach ($list as $sn => $bikeListing) {
+                      $bikeID = $bikeListing->serialnumber;
+                      $condition = $bikeListing->condition;
+                      $title = "$bikeListing->title"  . "   " . "[$condition]";
+                      $description = $bikeListing->description;
+                      $price = $bikeListing->price;
                       $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
                       $eachBox =
                       "
@@ -298,7 +394,7 @@
                }
                echo '<div class="scrollfeature">';
                echo '<div class="flex-bikelisting-parent">';
-               echo renderBoxes($totalBikeListing);
+               echo renderBoxes($bikeList);
                echo '</div>';
                echo '</div>';
             }

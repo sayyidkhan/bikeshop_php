@@ -14,6 +14,8 @@ class BikeListing {
     public $yearofmanufacture; // integer
     public $characteristics; // string (probably might use enum's)
     public $condition; // string (new , used)
+    //price of bike
+    public $price;
 
     function __construct(
         $name,
@@ -25,7 +27,8 @@ class BikeListing {
         $description,
         $yearofmanufacture,
         $characteristics,
-        $condition
+        $condition,
+        $price
     ) {
     $this->name = $name;
     $this->phone = $phone;
@@ -37,8 +40,56 @@ class BikeListing {
     $this->yearofmanufacture = $yearofmanufacture;
     $this->characteristics = $characteristics;
     $this->condition = $condition;
+    $this->price = $price;
     }
     
+    public static function initUsingFileLines($line) {
+        $lines = explode(",",$line);
+        $instance = null;
+        try {
+            $price = intval($lines[10]);
+            $price = number_format($price,2);
+
+            $instance = new self(
+            $lines[0],
+            $lines[1],
+            $lines[2],
+            $lines[3],
+            $lines[4],
+            $lines[5],
+            $lines[6],
+            $lines[7],
+            $lines[8],
+            $lines[9],
+            $price
+            );
+        }
+        catch (Exception $e) {
+            $instance = null;
+        }
+        return $instance;
+    }
+
+    public static function init() {
+        $price = intval($lines[10]);
+        $price = number_format($price,2);
+
+        $instance = new self(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        $price
+        );
+        return $instance;
+    }
+
     //generate serial number saperately instead of initialising on constructor to reduce initialisation timing
     public static function generateSerialNumber($year) {
         //extract the last two string characters using substring
