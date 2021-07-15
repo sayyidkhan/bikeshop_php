@@ -1,0 +1,22 @@
+/*table css */
+
+.ei-table {
+  font-family: arial, sans-serif;
+  font-size: 14px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.ei-table tr > td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 10px;
+}
+
+/*scroll feature for table */
+.scrollfeature-table {
+    height: 250px;
+    width: 450px;
+    overflow: auto;
+    margin-left: -5px;
+}

@@ -5,6 +5,7 @@
   define('IMG_PATH','./img/'); //define img path
   $main_css = 'main.css'; // main css filename
   $flex_css = 'flex.css'; // flex css filename
+  $tableui_css = 'tableui.css'; // flex css filename
 
   define('CURRENT_FILENAME','managelisting.php'); // filename to define globally
 
@@ -77,6 +78,7 @@
     <!-- main CSS-->
     <link rel="stylesheet" href='<?php echo (CSS_PATH . "$main_css"); ?>' type="text/css">
     <link rel="stylesheet" href='<?php echo (CSS_PATH . "$flex_css"); ?>' type="text/css">
+    <link rel="stylesheet" href='<?php echo (CSS_PATH . "$tableui_css"); ?>' type="text/css">
 
   </head>
   <body>
@@ -96,8 +98,8 @@
 
         <div id="content">
            <div>
-            <h2 class="centerText primarycolor">View Listing's</h2>
-            <h3 class="centerText">Search For your favourite bike's here today...</h3>
+            <h2 class="centerText primarycolor">Manage Listing</h2>
+            <h3 class="centerText">Search for your listed bikes...</h3>
             <!-- search query -->
             <?php
                 //for clearing all query
@@ -143,123 +145,21 @@
                 echo '<h5 class="center-text" style="padding-top: 3em;">No bike selected...</h5>';
               }
               else {
-                function expressInterestForm($currentID) {
-                    //save data into file
-                    function persistData($currentID,$name,$phone,$email,$expectedPrice) {
-                       $ExpInterestFile = fopen(DB_ExpInterest,"ab");
-                       fwrite($ExpInterestFile, "$currentID,$name,$phone,$email,$expectedPrice" . "\n");
-                       fclose($ExpInterestFile);
-                    }
-                    //button
-                    $disabled = "";
-                    $disabledColor = "bgprimarycolor";
-                    $successMsg = "";
-                    //err variables
-                    $nameErr = "";
-                    $emailErr = "";
-                    $phoneErr = "";
-                    $expectedPriceErr = "";
-
-                    //variables to store into textfile
-                    $name = null;
-                    $phone = null;
-                    $email = null;
-                    $expectedPrice = null;
-
-                    
-
-                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-                        function cleanInput($data) {
-                          $data = trim($data);
-                          $data = stripslashes($data);
-                          $data = htmlspecialchars($data);
-                          return $data;
-                        }
-                         //name validation
-                         if (empty($_POST["name"])) {
-                            $nameErr = "Name is required";
-                         } 
-                         else {
-                            $name = cleanInput($_POST["name"]);
-                            //if there is any digit throw error
-                            $pattern = "/\d+/";
-                            if (preg_match($pattern , $name) > 0) {
-                              $nameErr = "Invalid name format";
-                            }
-                         }
-                         //phone validation
-                         if (empty($_POST["phone"])) {
-                            $phoneErr = "phone is required";
-                         } 
-                         else {
-                            $phone = cleanInput($_POST["phone"]);
-                            //if there is any string throw error
-                            $pattern = "/[a-zA-Z]+/";
-                            if (preg_match($pattern , $phone) > 0) {
-                              $phoneErr = "Invalid phone format";
-                            }
-                         }
-                        //email validation
-                        if (empty($_POST["email"])) {
-                          $emailErr = "Email is required";
-                        } else {
-                          $email = cleanInput($_POST["email"]);
-                          // check if e-mail address is well-formed
-                          if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                            $emailErr = "Invalid email format";
-                          }
-                        }
-                        //price validation
-                        if (empty($_POST["expectedPrice"])) {
-                          $expectedPriceErr = "Price is required";
-                        } else {
-                          $expectedPrice = cleanInput($_POST["expectedPrice"]);
-                          // check for number, if value is lesser than 1, then it is not numeric
-                          if(!is_numeric($expectedPrice)) {
-                             $expectedPriceErr = "Invalid price format";
-                          }
-                        }
-
-                        //if all validation is successful - all fields are blank, then save data
-                        if($nameErr === $emailErr && $phoneErr === $expectedPriceErr) {
-                            $disabledColor = "";
-                            $disabled = 'disabled';
-                            $successMsg = 'You have successfully submitted!';
-                            //perform data persistence
-                            persistData($currentID,$name,$phone,$email,$expectedPrice);
-                            //refresh UI to update counter
-                            header("Refresh: 3");
-                        }
-                    }
-
-                    $eachBox = 
-                    "
-                    <div>
-                      <p class='title-text text-leftalign'>Express Interest For Purchase:</p>
-
-                      <p class='required-text' style='float: left;'>* required field</p><br>
-                      <form method='post' accept-charset='utf-8'>
-                        <input class='inputstyling' type='text' name='name'  placeholder='your name...' value='$name'>
-                        <span class='required-text'>* ${nameErr}</span><br>
-                        <input class='inputstyling' type='text' name='phone' placeholder='your phonenumber...' value='$phone'>
-                        <span class='required-text'>* ${phoneErr}</span><br>
-                        <input class='inputstyling' type='text' name='email' placeholder='your email...' value='$email'>
-                        <span class='required-text'>* ${emailErr}</span><br>
-                        <input class='inputstyling' type='string' name='expectedPrice' placeholder='your expected price...' value='$expectedPrice'>
-                        <span class='required-text'>* ${expectedPriceErr}</span><br>
-                        <button
-                         $disabled
-                         type='submit'
-                         class='$disabledColor'
-                         style='height: 2em; width: 8em;'
-                         >
-                         Submit
-                         </button>
-                         <span class='required-text' style='color: green;'>$successMsg</span>
-                      </form>
-                    </div>
-                    ";
-                    return $eachBox;
+                function renderInterestedUsers() {
+                  $output =
+                  "
+                  <div class='scrollfeature-table'>
+                    <table class='ei-table'>
+                      <tr class='ei-table-row'>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Expected Price</th>
+                      </tr>
+                    </table>
+                  </div>
+                  ";
+                  return $output;
                 }
                 function renderSelectedBicycle($currentID) {
                       //get data from db
@@ -341,7 +241,7 @@
                       $characteristics = $bikeInfo->characteristics;
                       $price = $bikeInfo->price;
                       $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
-                      $expressInterestForm = expressInterestForm($currentID);
+                      $renderInterestedUsers = renderInterestedUsers();
                       $eachBox =
                       "
                       <div class='flex-bikelisting-child' style='width:450px'>
@@ -373,8 +273,13 @@
                          <div class='price-text-div primarycolor'><p class='price-text'>$price</p></div>
                         </div>
 
-                        <!-- express interest form -->
-                        $expressInterestForm
+                        <!-- display interested people -->
+                        <div>
+                          <p class='title-text text-leftalign'>Individuals Interested in Purchase:</p>
+
+                          <!-- render table here -->
+                          $renderInterestedUsers
+                        </div>
 
                       </div>
                       ";
