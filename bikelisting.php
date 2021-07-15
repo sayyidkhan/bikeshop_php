@@ -98,6 +98,7 @@
             <h3 class="centerText">Search For your favourite bike's here today...</h3>
             <!-- search query -->
             <?php
+                //for clearing all query
                 if (isset($_GET['bikesearch-clear'])) {
                     header("Location: bikelisting.php#");
                     exit();
@@ -112,6 +113,14 @@
               ?>
               <button name='bikesearch-clear' class="boxsizing" type="submit" value='clear'>Clear</button>
               <button name='bikesearch-search' class="boxsizing" type="submit" value='submit'>search</button>
+              <p class='required-text' style='padding-top: 1em;'>
+                <?php
+                  //for detecting empty value (search button clicked but query is empty)
+                  if (isset($_GET['bikesearch-search']) && empty($_GET['bikesearch-query'])) {
+                    echo '*Search field cannot be blank'; 
+                  }
+                ?>
+              </p>
             </form>
             <!-- search query -->
            </div>
