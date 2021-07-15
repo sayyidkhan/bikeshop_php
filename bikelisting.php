@@ -6,6 +6,8 @@
   $main_css = 'main.css'; // main css filename
   $flex_css = 'flex.css'; // flex css filename
 
+  define('CURRENT_FILENAME','bikelisting.php'); // filename to define globally
+
   define('DB_ExpInterest', 'database/ExpInterest.txt'); //filepath to expinterest.txt
   define('DB_BikesforSale', 'database/BikesforSale.txt'); //filepath to expinterest.txt
 ?>
@@ -87,7 +89,7 @@
             <ul>
               <li><a href="index.php">Home</a></li>
               <li><a href="">Manage Listing</a></li>
-              <li><a href="bikelisting.php">View Listing's</a></li>
+              <li><a href="<?php echo (CURRENT_FILENAME); ?>">View Listing's</a></li>
             </ul>
           </div>
         </div>
@@ -100,7 +102,7 @@
             <?php
                 //for clearing all query
                 if (isset($_GET['bikesearch-clear'])) {
-                    header("Location: bikelisting.php#");
+                    header("Location: " . CURRENT_FILENAME . "#");
                     exit();
                 }
             ?>
@@ -400,6 +402,7 @@
                function renderBoxes($list,$searchquery) {
                   $finalOutput = "";
                   foreach ($list as $sn => $bikeListing) {
+                      $currentFilename = CURRENT_FILENAME;
                       $bikeID = $bikeListing->serialnumber;
                       $condition = $bikeListing->condition;
                       $title = "$bikeListing->title"  . "   " . "[$condition]";
@@ -419,7 +422,7 @@
                       </div>
 
                       <div>
-                        <form action='bikelisting.php#selectedBikeDashboard' method='get' class='removeCSS'>
+                        <form action='$currentFilename#selectedBikeDashboard' method='get' class='removeCSS'>
                           <button 
                           type='submit'
                           name='selectedBikeId'
