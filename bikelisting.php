@@ -14,6 +14,12 @@
 <?php
   $selectedBikeId = null;
   $successInterestSubmit = false;
+  $bikeSearchQuery = '';
+
+  //set search query
+  if(isset($_GET['bikesearch-query'])) {
+     $bikeSearchQuery = $_GET['bikesearch-query'];
+  }
 
   //set bike ID
   if (isset($_GET['selectedBikeId'])) {
@@ -34,10 +40,30 @@
   $BikesforSale = file(DB_BikesforSale);
   $BikesforSale = getBikeListFN($BikesforSale);
   //if search is performed on the search bike
-  if (isset($_GET['searchBike'])) {
-     // $selectedBikeId = $_GET['searchBike'];
-  }
+  if (isset($_GET['bikesearch-query'])) {
+      //case insensetive search query
+      function filterArray($myList,$query) {
+          function textcontains($text,$search) {
+              $text = strtolower($text);
+              $search = strtolower($search);
+              return (preg_match("/{$search}/i", $text)) ? true : false;
+          }
 
+          $result = array();
+          foreach ($myList as $key => $value) {
+              $validate = textcontains($key,$query);
+              if($validate){
+                $result[$key] = $value;
+              }
+          }
+          return $result;
+      } 
+     //1 get the search query 
+     $ID = $_GET['bikesearch-query'];
+     //2. perform the filter and return the result
+     $BikesforSale = filterArray($BikesforSale,$ID);
+  }
+  
 ?>
 
 <!DOCTYPE html>
@@ -71,9 +97,21 @@
             <h2 class="centerText primarycolor">View Listing's</h2>
             <h3 class="centerText">Search For your favourite bike's here today...</h3>
             <!-- search query -->
-            <form class="bikesearch boxsizing" action="#" style="margin:auto;max-width:500px;margin-bottom: 2em;">
-              <input class="boxsizing" type="text" placeholder="Search bike serial number..." name="searchBike">
-              <button class="boxsizing" type="submit">search</button>
+            <?php
+                if (isset($_GET['bikesearch-clear'])) {
+                    header("Location: bikelisting.php#");
+                    exit();
+                }
+            ?>
+            <form class="bikesearch boxsizing" action="#selectedBikeDashboard" style="margin:auto;max-width:600px;margin-bottom: 2em;">
+              <?php
+              $query = $GLOBALS['bikeSearchQuery'];
+              $bikesearchQuery =
+              "<input class='boxsizing' type='text' placeholder='Search bike serial number...' name='bikesearch-query' value='$query'>";
+              echo $bikesearchQuery;
+              ?>
+              <button name='bikesearch-clear' class="boxsizing" type="submit" value='clear'>Clear</button>
+              <button name='bikesearch-search' class="boxsizing" type="submit" value='submit'>search</button>
             </form>
             <!-- search query -->
            </div>
@@ -345,11 +383,12 @@
             //feed bike listing data here
             $bikeList = $GLOBALS['BikesforSale'];
             //if listing is 0, display no results
-            if($bikeList === 0) {
-               echo '<h6 class="center-text">No bike listings available at the current moment...</h6>';
+            if(count($bikeList) === 0) {
+               echo '<h5 class="center-text" style="padding-top: 3em;">No bike listings available or<br> found at the current moment...</h5>';
+               // echo '<h6 class="center-text">No bike listings available at the current moment...</h6>';
             }
             else {
-               function renderBoxes($list) {
+               function renderBoxes($list,$searchquery) {
                   $finalOutput = "";
                   foreach ($list as $sn => $bikeListing) {
                       $bikeID = $bikeListing->serialnumber;
@@ -381,6 +420,7 @@
                           >
                           View Detail
                           </button>
+                          <input type='text' name='bikesearch-query' value='$searchquery' hidden>
                         </form>
                         <div class='price-text-div primarycolor'><p class='price-text'>$price</p></div>
                       </div>
@@ -392,9 +432,14 @@
                   }
                   echo $finalOutput;
                }
+
+               //get the current search query
+               //this is REQUIRED, otherwise after selecting a bike, the available listing will reset
+               $searchquery = $GLOBALS['bikeSearchQuery'];
+
                echo '<div class="scrollfeature">';
                echo '<div class="flex-bikelisting-parent">';
-               echo renderBoxes($bikeList);
+               echo renderBoxes($bikeList,$searchquery);
                echo '</div>';
                echo '</div>';
             }

@@ -113,12 +113,11 @@ form.bikesearch input[type=text] {
   font-size: 17px;
   border: 1px solid grey;
   float: left;
-  width: 80%;
+  width: 55%;
   background: #f1f1f1;
 }
 
 form.bikesearch button {
-  float: left;
   width: 20%;
   padding: 10px;
   background: #2196F3;
