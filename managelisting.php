@@ -1,4 +1,7 @@
 <?php
+  session_start();
+
+  include 'classes/interestuser.php';
   include 'classes/bikelisting.php';
 
   define('CSS_PATH', 'css/'); //define bootstrap css path
@@ -90,6 +93,7 @@
           <div id="nav">
             <ul>
               <li><a href="index.php">Home</a></li>
+              <li><a href="#">Add Listing</a></li>
               <li><a href="<?php echo (CURRENT_FILENAME); ?>">Manage Listing</a></li>
               <li><a href="bikeListing.php">View Listing's</a></li>
             </ul>
@@ -99,37 +103,95 @@
         <div id="content">
            <div>
             <h2 class="centerText primarycolor">Manage Listing</h2>
-            <h3 class="centerText">Search for your listed bikes...</h3>
-            <!-- search query -->
-            <?php
-                //for clearing all query
-                if (isset($_GET['bikesearch-clear'])) {
-                    header("Location: " . CURRENT_FILENAME . "#");
-                    exit();
-                }
-            ?>
-            <form class="bikesearch boxsizing" action="#selectedBikeDashboard" style="margin:auto;max-width:600px;margin-bottom: 2em;">
+            <!-- login using name -->
+            <h3 class="centerText">Enter your name here to manage your listing</h3>
+            <form 
+            method='post'
+            name='login-name'
+            class="bikesearch boxsizing"
+            action="#selectedBikeDashboard" 
+            style="margin:auto;max-width:600px;margin-bottom: 2em;padding-left: 7.8em;">
               <?php
-              $query = $GLOBALS['bikeSearchQuery'];
+              $login = $_SESSION["login"];
               $bikesearchQuery =
-              "<input class='boxsizing' type='text' placeholder='Search bike serial number...' name='bikesearch-query' value='$query'>";
+              "<input class='boxsizing' type='text' placeholder='enter your name...' name='login' value='$login'>";
               echo $bikesearchQuery;
               ?>
-              <button name='bikesearch-clear' class="boxsizing" type="submit" value='clear'>Clear</button>
-              <button name='bikesearch-search' class="boxsizing" type="submit" value='submit'>search</button>
-              <p class='required-text' style='padding-top: 1em;'>
+              <button name='bikesearch-login' class="boxsizing" type="submit" value='submit'>login</button>
+              <p class='required-text' style='padding-top: 1em;padding-right: 9em;'>
                 <?php
                   //for detecting empty value (search button clicked but query is empty)
-                  if (isset($_GET['bikesearch-search']) && empty($_GET['bikesearch-query'])) {
-                    echo '*Search field cannot be blank'; 
+                  if (isset($_POST['bikesearch-login']) && empty($_POST['login'])) {
+                      $_SESSION["login"] = '';
+                      session_unset();
+                      echo '*login cannot be blank'; 
+                  }
+                  elseif(isset($_POST['bikesearch-login']) && !empty($_POST['login'])) {
+                      $bikeList = $GLOBALS['BikesforSale'];
+                      $validateLogin = $_POST['login'];
+                      $loginStatus = false;
+                      //search for name
+                      foreach ($bikeList as $key => $instance) {
+                          $name = $instance->name;
+                          if($validateLogin === $name) {
+                            $loginStatus = true;
+                              break;
+                          }
+                      }
+
+                      //if login status is successful
+                      if($loginStatus) { 
+                         $_SESSION["login"] = $validateLogin;
+                         //refresh UI to update session
+                         header("Refresh: 0.1");
+                      }
+                      else {
+                         $_SESSION["login"] = '';
+                         session_unset();
+                         echo '*name does not exist or not in system';
+                      }
+
                   }
                 ?>
               </p>
             </form>
+            <!-- login using name -->
+            <!-- search query -->
+            <!-- empty (keep hidden) else (show) -->
+                  <!--  -->
+            <div style="<?php echo(empty($_SESSION['login']) ? 'display: none;' : '') ?>">
+              <h3 class="centerText">Search for your listed bikes...</h3>
+              <?php
+                  //for clearing all query
+                  if (isset($_GET['bikesearch-clear'])) {
+                      header("Location: " . CURRENT_FILENAME . "#");
+                      exit();
+                  }
+              ?>
+              <form name='search-bike 'class="bikesearch boxsizing" action="#selectedBikeDashboard" style="margin:auto;max-width:600px;margin-bottom: 2em;">
+                <?php
+                $query = $GLOBALS['bikeSearchQuery'];
+                $bikesearchQuery =
+                "<input class='boxsizing' type='text' placeholder='Search bike serial number...' name='bikesearch-query' value='$query'>";
+                echo $bikesearchQuery;
+                ?>
+                <button name='bikesearch-clear' class="boxsizing" type="submit" value='clear'>Clear</button>
+                <button name='bikesearch-search' class="boxsizing" type="submit" value='submit'>search</button>
+                <p class='required-text' style='padding-top: 1em;'>
+                  <?php
+                    //for detecting empty value (search button clicked but query is empty)
+                    if (isset($_GET['bikesearch-search']) && empty($_GET['bikesearch-query'])) {
+                      echo '*Search field cannot be blank'; 
+                    }
+                  ?>
+                </p>
+              </form>
+            </div>
             <!-- search query -->
            </div>
         </div>
 
+        <section style="<?php echo(empty($_SESSION['login']) ? 'display: none;' : '') ?>">
         <div 
         id="listing-dashboard" 
         class="flex-container"
@@ -145,20 +207,111 @@
                 echo '<h5 class="center-text" style="padding-top: 3em;">No bike selected...</h5>';
               }
               else {
-                function renderInterestedUsers() {
-                  $output =
-                  "
-                  <div class='scrollfeature-table'>
-                    <table class='ei-table'>
-                      <tr class='ei-table-row'>
-                        <th>Name</th>
-                        <th>Phone</th>
-                        <th>Email</th>
-                        <th>Expected Price</th>
-                      </tr>
-                    </table>
-                  </div>
-                  ";
+                function renderInterestedUsers($mylist,$bikeId,$peopleInterested) {
+                  $output = '';
+                  if(intval($peopleInterested) === 0) {
+                      $output = '<h6 class="center-text" style="padding-top: 3em; padding-bottom: 4.5em;">No interested buyers...</h6>';
+                  }
+                  else {
+                      //get assoc array containing interested users
+                      function getinterestedUsrList($bikeId,$file) {
+                          //explode each line to become interestUser Object
+                          function mapToObject($file) {
+                              $interestedUsrList = array();
+                              foreach ($file as $line) {
+                                  $instance = InterestUser::initUsingFileLines($line);
+                                  array_push($interestedUsrList, $instance); 
+                              }
+                              return $interestedUsrList;
+                          }
+                          //group serial number using associative arrays
+                          function groupSN($oldList) {
+                              $myNewList = array();
+                              foreach ($oldList as $instance) {
+                                  $serialNo = $instance->serialnumber;
+                                  //if key exist - group them together
+                                  if(array_key_exists($serialNo , $myNewList)) {
+                                      array_push($myNewList[$serialNo], $instance);
+                                  }
+                                  //else initialise the array
+                                  else {
+                                      $initArray = array();
+                                      $initArray[] = $instance;
+                                      $myNewList[$serialNo] = $initArray;
+                                  }
+
+                              }
+                              return $myNewList;
+                          }
+                          //find serial key
+                          function findSN($bikeId,$array) {
+                              //if exist return counter
+                              if(array_key_exists($bikeId, $array)) {
+                                return $array[$bikeId];
+                              }
+                              else {
+                                return array();
+                              }
+                          }
+
+                          //1. get the file directory
+                          $ExpInterestFile = $file;
+                          //2. explode each line from file so as each line will be an array
+                          $bikeIdList = mapToObject($ExpInterestFile);
+                          //3. group same serial number and convert it into an assoc array
+                          $bikeIdList = groupSN($bikeIdList);
+                          //4. if serialNo in list return list, otherwise return blank list
+                          $result = findSN($bikeId,$bikeIdList);
+                          return $result; 
+                      }
+
+                      //create table rows
+                      function createTableRows($mylist) {
+                          $allRows = '';
+                          foreach($mylist as $instance) {
+                            //attributes
+                            $name = $instance->name;
+                            $phone = $instance->phone;
+                            $email = $instance->email;
+                            $price = $instance->price;
+
+                            //build each row
+                            $eachRow = 
+                            "
+                            <tr class='ei-table-row'>
+                              <td>$name</td>
+                              <td>$phone</td>
+                              <td>$email</td>
+                              <td>$price</td>
+                            </tr>
+                            ";
+                            $allRows .= $eachRow;
+                          }
+                          return $allRows;
+                      }
+
+                      $filterArray = getinterestedUsrList($bikeId,$mylist);
+                      $tableRows = createTableRows($filterArray);
+                      $output =
+                      "
+                      <div class='scrollfeature-table'>
+                        <table class='ei-table'>
+
+                          <tr>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Price</th>
+                          </tr>
+
+                          <!-- table rows rendered here -->
+                          $tableRows
+                          <!-- table rows rendered here -->
+
+                        </table>
+                      </div>
+                      ";
+                  }
                   return $output;
                 }
                 function renderSelectedBicycle($currentID) {
@@ -241,7 +394,7 @@
                       $characteristics = $bikeInfo->characteristics;
                       $price = $bikeInfo->price;
                       $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
-                      $renderInterestedUsers = renderInterestedUsers();
+                      $renderInterestedUsers = renderInterestedUsers($GLOBALS['ExpInterestList'],$bikeID,$peopleInterested);
                       $eachBox =
                       "
                       <div class='flex-bikelisting-child' style='width:450px'>
@@ -379,6 +532,7 @@
         </div>
 
     </div>
+    </section>
 
 
   </body>

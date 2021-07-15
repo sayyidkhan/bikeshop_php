@@ -88,6 +88,7 @@
           <div id="nav">
             <ul>
               <li><a href="index.php">Home</a></li>
+              <li><a href="#">Add Listing</a></li>
               <li><a href="managelisting.php">Manage Listing</a></li>
               <li><a href="<?php echo (CURRENT_FILENAME); ?>">View Listing's</a></li>
             </ul>
