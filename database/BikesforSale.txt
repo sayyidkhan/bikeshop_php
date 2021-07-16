@@ -1,0 +1,8 @@
+name1,12345678,email1@email.com,title1,17-951-IBQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics1,NEW,10
+name2,12345678,email2@email.com,title2,17-952-IVQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics2,NEW,20
+name3,12345678,email3@email.com,title3,17-953-IVQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics3,NEW,50
+name4,12345678,email4@email.com,title4,17-954-IBQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics4,NEW,70
+name1,12345678,email1@email.com,title1,17-955-IBQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics1,NEW,10
+name2,12345678,email2@email.com,title2,17-956-IVQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics2,NEW,20
+name3,12345678,email3@email.com,title3,17-957-IVQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics3,NEW,50
+name4,12345678,email4@email.com,title4,17-958-IBQ,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics4,NEW,70

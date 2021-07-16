@@ -1,17 +1,72 @@
 <?php
-  define('BS_CSSPATH', 'css/'); //define bootstrap css path
+  include 'classes/bikelisting.php';
+
+  define('CSS_PATH', 'css/'); //define bootstrap css path
   define('IMG_PATH','./img/'); //define img path
-  $bootstrap_css = 'bootstrap.min.css'; //bootstrap_css filename
+  $main_css = 'main.css'; // main css filename
+  $flex_css = 'flex.css'; // flex css filename
+
+  define('CURRENT_FILENAME','bikelisting.php'); // filename to define globally
+
+  define('DB_ExpInterest', 'database/ExpInterest.txt'); //filepath to expinterest.txt
+  define('DB_BikesforSale', 'database/BikesforSale.txt'); //filepath to expinterest.txt
 ?>
 
-<style>
-.scrollfeature {
-    height: 500px;
-    width: 300px;
-    overflow: auto;
-    margin-left: -5px;
-}
-</style>
+<!-- manage global variables -->
+<?php
+  $selectedBikeId = null;
+  $successInterestSubmit = false;
+  $bikeSearchQuery = '';
+
+  //set search query
+  if(isset($_GET['bikesearch-query'])) {
+     $bikeSearchQuery = $_GET['bikesearch-query'];
+  }
+
+  //set bike ID
+  if (isset($_GET['selectedBikeId'])) {
+     $selectedBikeId = $_GET['selectedBikeId'];
+  }
+  //set interest list
+  $ExpInterestList = file(DB_ExpInterest);
+  //set BikesforSale
+  function getBikeListFN($myList) {
+    $result = array();
+    foreach($myList as $lines) {
+        $instance = bikelisting::initUsingFileLines($lines);
+        $sn = $instance->serialnumber;
+        $result[$sn] = $instance;
+    }
+    return $result;
+  }
+  $BikesforSale = file(DB_BikesforSale);
+  $BikesforSale = getBikeListFN($BikesforSale);
+  //if search is performed on the search bike
+  if (isset($_GET['bikesearch-query'])) {
+      //case insensetive search query
+      function filterArray($myList,$query) {
+          function textcontains($text,$search) {
+              $text = strtolower($text);
+              $search = strtolower($search);
+              return (preg_match("/{$search}/i", $text)) ? true : false;
+          }
+
+          $result = array();
+          foreach ($myList as $key => $value) {
+              $validate = textcontains($key,$query);
+              if($validate){
+                $result[$key] = $value;
+              }
+          }
+          return $result;
+      } 
+     //1 get the search query 
+     $ID = $_GET['bikesearch-query'];
+     //2. perform the filter and return the result
+     $BikesforSale = filterArray($BikesforSale,$ID);
+  }
+  
+?>
 
 <!DOCTYPE html>
 <html>
@@ -19,179 +74,408 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Takoko - Bike Shop</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="all,follow">
-    <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href='<?php echo (BS_CSSPATH . "$bootstrap_css"); ?>' type="text/css">
+    <!-- main CSS-->
+    <link rel="stylesheet" href='<?php echo (CSS_PATH . "$main_css"); ?>' type="text/css">
+    <link rel="stylesheet" href='<?php echo (CSS_PATH . "$flex_css"); ?>' type="text/css">
 
   </head>
   <body>
-    <!-- navbar-->
-    <header class="header">
-      <nav class="navbar navbar-expand-lg navbar-light bg-white py-3 py-lg-2">
-        <div class="container"><a class="navbar-brand py-3 d-flex align-items-center" href="index.php"><img src="img/logo.svg" alt="" width="30"><span class="text-uppercase text-small font-weight-bold text-dark ml-2 mb-0">Takoko</span></a>
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-                    <!-- Navbar link-->
-                    <a class="nav-link">Home</a>
-              </li>
-              <li class="nav-item">
-                    <!-- Navbar link-->
-                    <a class="nav-link" href="detail.html">Manage Listing</a>
-              </li>
-              <li class="nav-item ml-lg-2 py-2 py-lg-0"><a class="btn btn-primary" href="bikelisting.php" data-toggle="modal">View Listing's</a></li>
+
+      <div id="wrapper">
+
+        <div id="header">
+          <h1>Takoko</h1>
+          <div id="nav">
+            <ul>
+              <li><a href="index.php">Home</a></li>
+              <li><a href="#">Add Listing</a></li>
+              <li><a href="managelisting.php">Manage Listing</a></li>
+              <li><a href="<?php echo (CURRENT_FILENAME); ?>">View Listing's</a></li>
             </ul>
           </div>
         </div>
-      </nav>
-    </header>
 
-    <!-- search section-->
-    <section class="py-5 text-center container">
-      <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto">
-          <h1 class="fw-light">Bike Listing's</h1>
-          <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
-          <p>
-            <a href="#" class="btn btn-primary my-2">Main call to action</a>
-            <a href="#" class="btn btn-secondary my-2">Secondary action</a>
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- listing section-->
-    <section>
-      <div class="album py-5 bg-light">
-        <div class="container">
-            <div class="py-lg-5">
-            <div>
+        <div id="content">
+           <div>
+            <h2 class="centerText primarycolor">View Listing's</h2>
+            <h3 class="centerText">Search For your favourite bike's here today...</h3>
+            <!-- search query -->
             <?php
-            //feed bike listing data here
-            $totalBikeListing = 12;
-            //if listing is 0, display no results
-            if($totalBikeListing === 0) {
-              echo '<h4 class="text-center py-lg-5">No bike listings available at the current moment...</h4>';
-            }
-            //otherwise render listing
-            else {
-              function renderBoxes($listLen) {
-                 $finalOutput = "";
-                 for ($x = 1; $x < $listLen + 1; $x++) {
-                   //format each box
-                   $bikeID = 'bike id here';
-                   $title = "$x - title of bike listing";
-                   $description = 'enter the description here.';
-                   $price = $x . "0.00";
-                   $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
-                   $eachBox =
-                   "
-                    <div class='col pb-4'>
-                      <div class='card shadow-sm'>
+                //for clearing all query
+                if (isset($_GET['bikesearch-clear'])) {
+                    header("Location: " . CURRENT_FILENAME . "#");
+                    exit();
+                }
+            ?>
+            <form class="bikesearch boxsizing" action="#selectedBikeDashboard" style="margin:auto;max-width:600px;margin-bottom: 2em;">
+              <?php
+              $query = $GLOBALS['bikeSearchQuery'];
+              $bikesearchQuery =
+              "<input class='boxsizing' type='text' placeholder='Search bike serial number...' name='bikesearch-query' value='$query'>";
+              echo $bikesearchQuery;
+              ?>
+              <button name='bikesearch-clear' class="boxsizing" type="submit" value='clear'>Clear</button>
+              <button name='bikesearch-search' class="boxsizing" type="submit" value='submit'>search</button>
+              <p class='required-text' style='padding-top: 1em;'>
+                <?php
+                  //for detecting empty value (search button clicked but query is empty)
+                  if (isset($_GET['bikesearch-search']) && empty($_GET['bikesearch-query'])) {
+                    echo '*Search field cannot be blank'; 
+                  }
+                ?>
+              </p>
+            </form>
+            <!-- search query -->
+           </div>
+        </div>
 
-                        <img 
-                          class='bd-placeholder-img card-img-top p-4'
-                          width='100%'
-                          height='225'
-                          src='$imgURL'
-                        />
+        <div 
+        id="listing-dashboard" 
+        class="flex-container"
+        style="max-width: 80%; margin: auto;">
+          <!-- start of selected listing -->
+          <div class="flex-child dotted" >
+            <h4>Selected Bike</h4>
 
-                        <div class='card-body'>
-                          <small>$bikeID</small>
-                          <h5>$title</h5>
-                          <p class='card-text'>$description</p>
+            <?php
+              $currentID = $GLOBALS['selectedBikeId'];
 
-                          <div class='d-flex justify-content-between align-items-center'>
-                            <div class='btn-group'>
-                              <button type='button' class='btn btn-sm btn-outline-secondary'>View Detail</button>
-                            </div>
-                            <p class='text-dark'>\$ $price</p>
-                          </div>
+              if($currentID === null) {
+                echo '<h5 class="center-text" style="padding-top: 3em;">No bike selected...</h5>';
+              }
+              else {
+                function expressInterestForm($currentID) {
+                    //save data into file
+                    function persistData($currentID,$name,$phone,$email,$expectedPrice) {
+                       $ExpInterestFile = fopen(DB_ExpInterest,"ab");
+                       fwrite($ExpInterestFile, "$currentID,$name,$phone,$email,$expectedPrice" . "\n");
+                       fclose($ExpInterestFile);
+                    }
+                    //button
+                    $disabled = "";
+                    $disabledColor = "bgprimarycolor";
+                    $successMsg = "";
+                    //err variables
+                    $nameErr = "";
+                    $emailErr = "";
+                    $phoneErr = "";
+                    $expectedPriceErr = "";
 
-                         </div>
+                    //variables to store into textfile
+                    $name = null;
+                    $phone = null;
+                    $email = null;
+                    $expectedPrice = null;
 
-                      </div>
+                    
+
+                    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+                        function cleanInput($data) {
+                          $data = trim($data);
+                          $data = stripslashes($data);
+                          $data = htmlspecialchars($data);
+                          return $data;
+                        }
+                         //name validation
+                         if (empty($_POST["name"])) {
+                            $nameErr = "Name is required";
+                         } 
+                         else {
+                            $name = cleanInput($_POST["name"]);
+                            //if there is any digit throw error
+                            $pattern = "/\d+/";
+                            if (preg_match($pattern , $name) > 0) {
+                              $nameErr = "Invalid name format";
+                            }
+                         }
+                         //phone validation
+                         if (empty($_POST["phone"])) {
+                            $phoneErr = "phone is required";
+                         } 
+                         else {
+                            $phone = cleanInput($_POST["phone"]);
+                            //if there is any string throw error
+                            $pattern = "/[a-zA-Z]+/";
+                            if (preg_match($pattern , $phone) > 0) {
+                              $phoneErr = "Invalid phone format";
+                            }
+                         }
+                        //email validation
+                        if (empty($_POST["email"])) {
+                          $emailErr = "Email is required";
+                        } else {
+                          $email = cleanInput($_POST["email"]);
+                          // check if e-mail address is well-formed
+                          if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                            $emailErr = "Invalid email format";
+                          }
+                        }
+                        //price validation
+                        if (empty($_POST["expectedPrice"])) {
+                          $expectedPriceErr = "Price is required";
+                        } else {
+                          $expectedPrice = cleanInput($_POST["expectedPrice"]);
+                          // check for number, if value is lesser than 1, then it is not numeric
+                          if(!is_numeric($expectedPrice)) {
+                             $expectedPriceErr = "Invalid price format";
+                          }
+                        }
+
+                        //if all validation is successful - all fields are blank, then save data
+                        if($nameErr === $emailErr && $phoneErr === $expectedPriceErr) {
+                            $disabledColor = "";
+                            $disabled = 'disabled';
+                            $successMsg = 'You have successfully submitted!';
+                            //perform data persistence
+                            persistData($currentID,$name,$phone,$email,$expectedPrice);
+                            //refresh UI to update counter
+                            header("Refresh: 3");
+                        }
+                    }
+
+                    $eachBox = 
+                    "
+                    <div>
+                      <p class='title-text text-leftalign'>Express Interest For Purchase:</p>
+
+                      <p class='required-text' style='float: left;'>* required field</p><br>
+                      <form method='post' accept-charset='utf-8'>
+                        <input class='inputstyling' type='text' name='name'  placeholder='your name...' value='$name'>
+                        <span class='required-text'>* ${nameErr}</span><br>
+                        <input class='inputstyling' type='text' name='phone' placeholder='your phonenumber...' value='$phone'>
+                        <span class='required-text'>* ${phoneErr}</span><br>
+                        <input class='inputstyling' type='text' name='email' placeholder='your email...' value='$email'>
+                        <span class='required-text'>* ${emailErr}</span><br>
+                        <input class='inputstyling' type='string' name='expectedPrice' placeholder='your expected price...' value='$expectedPrice'>
+                        <span class='required-text'>* ${expectedPriceErr}</span><br>
+                        <button
+                         $disabled
+                         type='submit'
+                         class='$disabledColor'
+                         style='height: 2em; width: 8em;'
+                         >
+                         Submit
+                         </button>
+                         <span class='required-text' style='color: green;'>$successMsg</span>
+                      </form>
                     </div>
                     ";
-                    //append each box into final output
-                    $finalOutput .= $eachBox;
-                 }
-                 return $finalOutput;
+                    return $eachBox;
+                }
+                function renderSelectedBicycle($currentID) {
+                      //get data from db
+                      function retireveData($bikeId,$file) {
+                         //get serial number from file
+                         function getSerialNoFromFileArray($file) {
+                              $bikeIdList = array();
+                              foreach ($file as $line) {
+                                  $currentLine = explode(",",$line);
+                                  $bikeID = $currentLine[0];
+                                  array_push($bikeIdList, $bikeID); 
+                              }
+                              return $bikeIdList;
+                          }
+                         //group serial number using associative arrays
+                         function groupSerialNumber($oldList) {
+                            $myNewList = array();
+                              foreach ($oldList as $index) {
+                                  //if key exist - increment the counter
+                                  if(array_key_exists(strval($index), $myNewList)){
+                                      $currentCounter = $myNewList[strval($index)];
+                                      $myNewList[strval($index)] = $currentCounter + 1;
+                                  }
+                                  //else initialise the value
+                                  else {
+                                      $myNewList[strval($index)] = 1; 
+                                  }
+
+                              }
+                              return $myNewList;
+                          }
+                          //find serial key
+                          function findSerialKey($bikeId,$array) {
+                              //if exist return counter
+                              if(array_key_exists($bikeId, $array)) {
+                                return $array[$bikeId];
+                              }
+                              else {
+                                return 0;
+                              }
+                          }
+
+                          //1. get the file directory
+                          $ExpInterestFile = $file;
+                          //2. extract bike id from the file
+                          $bikeIdList = getSerialNoFromFileArray($ExpInterestFile);
+                          //3. group same serial number
+                          $bikeIdList = groupSerialNumber($bikeIdList);
+                          //4. if serialNo in list return noOfPeopleInterested, otherwise return 0
+                          $result = findSerialKey($bikeId,$bikeIdList);
+                          return $result; 
+                      }
+                      function findIdInBikeList($bikeId,$associativeArray) {
+                          $find = $associativeArray[$bikeId];
+                          if($find) {
+                              return $find;
+                          }
+                          else {
+                              return bikeListing::init();
+                          }
+                      }
+                      //extract data from bikeList
+                      $bikeList = $GLOBALS['BikesforSale'];
+                      $bikeInfo = findIdInBikeList($currentID,$bikeList);
+
+                      //contact info
+                      $name = $bikeInfo->name;
+                      $phone = $bikeInfo->phone;
+                      $email = $bikeInfo->email;
+                      $contactDetails = "$phone , $email";
+                      //bike info
+                      $bikeID = $currentID;
+                      $yearofmanufacture = $bikeInfo->yearofmanufacture;
+                      $peopleInterested = retireveData($bikeID,$GLOBALS['ExpInterestList']);
+                      $condition = $bikeInfo->condition;
+                      $title = "$bikeInfo->title"  . "   " . "[$condition]";
+                      $description = $bikeInfo->description;
+                      $type = $bikeInfo->type;
+                      $characteristics = $bikeInfo->characteristics;
+                      $price = $bikeInfo->price;
+                      $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
+                      $expressInterestForm = expressInterestForm($currentID);
+                      $eachBox =
+                      "
+                      <div class='flex-bikelisting-child' style='width:450px'>
+                      
+                      <div><img src='$imgURL' class='bike-img-format' /></div>
+                      
+                        <div class='text-leftalign'>
+                          <p class='bikeid-text text-leftalign'>$bikeID <span style='float: right;'>Year Of Manufacture: $yearofmanufacture</span></p>
+                          <p class='title-text text-leftalign'>$title</p>
+                          <p class='description-text text-leftalign'>$description</p>
+                          <p class='attributes-text text-leftalign'><b>Type: </b> $type</p>
+                          <p class='attributes-text text-leftalign'><b>Characteristics: </b> $characteristics</p>
+                          <p class='attributes-text text-leftalign'><b>Contact Name: </b> $name</p>
+                          <p class='attributes-text text-leftalign'><b>Contact Details: </b> $contactDetails</p>
+                        </div>
+
+                        
+                        <div>
+                          <button 
+                          name='selectedBikeId'
+                          value='$bikeID'
+                          style='margin-top: 0.25em;'
+                          class='bgteritarycolor1'
+                          style='padding: 0.5em;'
+                          disabled
+                          >
+                          $peopleInterested people are interested right now !
+                          </button>
+                         <div class='price-text-div primarycolor'><p class='price-text'>$price</p></div>
+                        </div>
+
+                        <!-- express interest form -->
+                        $expressInterestForm
+
+                      </div>
+                      ";
+                      echo $eachBox;
+                }
+                echo "<div id='selectedBikeDashboard' class='solidborder flex-container' style='margin-top: 2em;'>";
+                echo renderSelectedBicycle($currentID);
+                echo "</div>";
               }
-
-              //start of HTML script
-              echo '<div class="row">';
-
-              // current listing's //
-              echo '<div class="col-5">';
-              echo '<div class="mb-5"><h3>Selected Bike</h3></div>';
-              echo '<h5>No bike selected yet...</h5>';
-              echo '</div>';
-              // bike listing's //
-
-              // bike listing's //
-              echo '<div class="col-7 scrollfeature">';
-              echo '<div class="mb-5"><h3>Available Listing\'s</h3></div>';
-              echo '  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-2">';
-              echo renderBoxes($totalBikeListing);
-              echo '  </div>';
-              echo '</div>';
-              // bike listing's //
-
-              echo '</div>';
-              //end of HTML script
-            }
             ?>
-            </div>
           </div>
-        </div>
-      </div>
-    </section>
+          <!-- end of selected listing -->
+          <!-- start of listing -->
+          <div class="flex-child">
+            <h4>Available Listing's</h4>
+            <?php
+            //feed bike listing data here
+            $bikeList = $GLOBALS['BikesforSale'];
+            //if listing is 0, display no results
+            if(count($bikeList) === 0) {
+               echo '<h5 class="center-text" style="padding-top: 3em;">No bike listings available or<br> found at the current moment...</h5>';
+               // echo '<h6 class="center-text">No bike listings available at the current moment...</h6>';
+            }
+            else {
+               function renderBoxes($list,$searchquery) {
+                  $finalOutput = "";
+                  foreach ($list as $sn => $bikeListing) {
+                      $currentFilename = CURRENT_FILENAME;
+                      $bikeID = $bikeListing->serialnumber;
+                      $condition = $bikeListing->condition;
+                      $title = "$bikeListing->title"  . "   " . "[$condition]";
+                      $description = $bikeListing->description;
+                      $price = $bikeListing->price;
+                      $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
+                      $eachBox =
+                      "
+                      <div class='flex-bikelisting-child'>
+                      
+                      <div><img src='$imgURL' class='bike-img-format' /></div>
+                      
+                      <div class='text-leftalign'>
+                        <p class='bikeid-text text-leftalign'>$bikeID</p>
+                        <p class='title-text text-leftalign'>$title</p>
+                        <p class='description-text text-leftalign'>$description</p>
+                      </div>
 
+                      <div>
+                        <form action='$currentFilename#selectedBikeDashboard' method='get' class='removeCSS'>
+                          <button 
+                          type='submit'
+                          name='selectedBikeId'
+                          value='$bikeID'
+                          class='bgsecondarycolor'
+                          style='padding: 0.5em;'
+                          >
+                          View Detail
+                          </button>
+                          <input type='text' name='bikesearch-query' value='$searchquery' hidden>
+                        </form>
+                        <div class='price-text-div primarycolor'><p class='price-text'>$price</p></div>
+                      </div>
 
+                      </div>
+                      ";
+                      //append to final output
+                      $finalOutput .= $eachBox;
+                  }
+                  echo $finalOutput;
+               }
 
-    <footer style="background: #111;">
-      <div class="container py-4">
-        <div class="row py-5">
-          <div class="col-md-4 col-sm-12 mb-3 mb-md-0">
-            <div class="d-flex align-items-center mb-3"><img src="img/logo-footer.svg" alt="" width="30"><span class="text-uppercase text-small font-weight-bold text-white ml-2">Takoko</span></div>
-            <p class="text-muted text-small font-weight-light mb-3">online marketplace to buy & sell bikes</p>
+               //get the current search query
+               //this is REQUIRED, otherwise after selecting a bike, the available listing will reset
+               $searchquery = $GLOBALS['bikeSearchQuery'];
+
+               echo '<div class="scrollfeature">';
+               echo '<div class="flex-bikelisting-parent">';
+               echo renderBoxes($bikeList,$searchquery);
+               echo '</div>';
+               echo '</div>';
+            }
+
+            ?>
+            
           </div>
-          <div class="col-md-4 col-sm-6 mb-3 mb-md-0">
-            <h6 class="pt-2 text-white">Navigation</h6>
-            <div class="d-flex flex-wrap">
-              <ul class="list-unstyled text-muted mb-0 mb-3 mr-4">
-                <li><a class="reset-anchor text-small" href="#">Home</a></li>
-                <li><a class="reset-anchor text-small" href="#">Manage Listing</a></li>
-                <li><a class="reset-anchor text-small" href="bikelisting.php">View Listing</a></li>
-              </ul>
-            </div>
-          </div>
-         
+          <!-- end of listing -->
         </div>
-      </div>
-      <div class="copyrights py-4" style="background: #0e0e0e">
-        <div class="container">
-          <div class="row text-center">
-            <div class="col-md-6 text-lg-left mb-2 mb-md-0">
-              <!-- php to manage current year -->
-              <p class="mb-0 text-muted mb-0 text-small">
-              &copy;
-              <?php 
-              $currentYear = date('Y'); 
-              echo $currentYear; 
-              ?>
-              All rights reserved.
-              </p>
-              <!-- php to manage current year -->
-            </div>
-          </div>
+
+        <div id="footer">
+          <p>
+            &copy;
+            <?php 
+            $currentYear = date('Y'); 
+            echo $currentYear; 
+            ?>
+            All rights reserved.
+          </p>
         </div>
-      </div>
-    </footer>
+
+    </div>
+
 
   </body>
 </html>
