@@ -2,7 +2,6 @@
 
 .ei-table {
   font-family: arial, sans-serif;
-  font-size: 14px;
   border-collapse: collapse;
   width: 100%;
 }
@@ -15,7 +14,6 @@
 
 /*scroll feature for table */
 .scrollfeature-table {
-    width: 450px;
     overflow: auto;
     margin-left: -5px;
     border: 1px solid #dddddd;

@@ -241,7 +241,7 @@
                 function renderInterestedUsers($mylist,$bikeId,$peopleInterested) {
                   $output = '';
                   if(intval($peopleInterested) === 0) {
-                      $output = '<h6 class="center-text" style="padding-top: 3em; padding-bottom: 4.5em;">No interested buyers...</h6>';
+                      $output = '<h6 class="center-text" style="padding-top: 3em; padding-bottom: 3em;">No interested buyers...</h6>';
                   }
                   else {
                       //get assoc array containing interested users
@@ -296,6 +296,44 @@
                           return $result; 
                       }
 
+                      function deleteUsrInterestById($filename, $idToDelete) {
+                          $result = false;
+                          try {
+                              $file = file($filename);
+                              foreach ($file as $key => $lines) {
+                                  $instance =  InterestUser::initUsingFileLines($lines);
+                                  $name = $instance->name;
+                                  $phone = $instance->phone;
+                                  $email = $instance->email;
+                                  $price = $instance->price;
+                                  $uniqueKey = strtolower($name . $phone . $email . $price);
+                                  //removing the line
+                                  if($uniqueKey === $idToDelete) {
+                                     unset($file[$key]);
+                                     break;
+                                  }
+                              }
+                              //reindexing array
+                              $file = array_values($file);
+                              //writing to file
+                              file_put_contents($filename, implode($file));
+                              $result = true;
+                          }
+                          catch (Exception $e) {
+                              $result = false;
+                          }
+                          return $result;
+                      }
+
+                      //manage any HTTP request here
+                      /* for delete option bikelisting */
+                      if (!empty($_POST['userinterest-delete'])) {
+                          deleteUsrInterestById(DB_ExpInterest,$_POST['userinterest-delete']);
+                          //refresh UI to update session
+                          header("Refresh: 0.1");
+                          //header("Location: " . CURRENT_FILENAME . "#available-listing");
+                      }
+
                       //create table rows
                       function createTableRows($mylist) {
                           $allRows = '';
@@ -305,6 +343,7 @@
                             $phone = $instance->phone;
                             $email = $instance->email;
                             $price = $instance->price;
+                            $uniqueKey = strtolower($name . $phone . $email . $price);
 
                             //build each row
                             $eachRow = 
@@ -314,6 +353,13 @@
                               <td>$phone</td>
                               <td>$email</td>
                               <td>$price</td>
+                              <form method='post'>
+                                <td>
+                                  <button style='color:red;border: 1px solid red;' type='submit' name='userinterest-delete' value='$uniqueKey'>
+                                    delete
+                                  </button>
+                                </td>
+                              </form>
                             </tr>
                             ";
                             $allRows .= $eachRow;
@@ -321,19 +367,22 @@
                           return $allRows;
                       }
 
+                      
+
                       $filterArray = getinterestedUsrList($bikeId,$mylist);
                       $tableRows = createTableRows($filterArray);
                       $output =
                       "
                       <!-- each table table row consumes 30px of space -->
-                      <div class='scrollfeature-table' style='height:180px;'>
-                        <table class='ei-table'>
+                      <div class='scrollfeature-table' style='height:180px;width:460px;'>
+                        <table class='ei-table' style='font-size:13px;width:450px;'>
 
                           <tr>
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Email</th>
                             <th>Price</th>
+                            <th>Action</th>
                           </tr>
 
                           <!-- table rows rendered here -->
