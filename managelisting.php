@@ -43,8 +43,27 @@
     }
     return $result;
   }
+  //filter list by name only
+  function filterBikeListByName($myList,$loginName) {
+     $result = array();
+     foreach ($myList as $key => $instance) {
+        $verifyName = $instance->name;
+        if(strtolower($loginName) === strtolower($verifyName)) {
+            $sn = $instance->serialnumber;
+            $result[$sn] = $instance;
+        }
+     }
+     return $result;
+  }
   $BikesforSale = file(DB_BikesforSale);
   $BikesforSale = getBikeListFN($BikesforSale);
+
+  //if login session is available - filter only
+  $loginSession = $_SESSION['login'];
+  if(isset($loginSession) && !empty($loginSession)) {
+      $BikesforSale = filterBikeListByName($BikesforSale,$loginSession);
+  }
+
   //if search is performed on the search bike
   if (isset($_GET['bikesearch-query'])) {
       //case insensetive search query
@@ -110,14 +129,20 @@
             name='login-name'
             class="bikesearch boxsizing"
             action="#selectedBikeDashboard" 
-            style="margin:auto;max-width:600px;margin-bottom: 2em;padding-left: 7.8em;">
+            style="margin:auto;max-width:600px;margin-bottom: 2em;padding-left: 4em;padding-right: 2em;">
               <?php
               $login = $_SESSION["login"];
+              $disabled = empty($_SESSION['login']) ? '' : 'disabled="true"';
               $bikesearchQuery =
-              "<input class='boxsizing' type='text' placeholder='enter your name...' name='login' value='$login'>";
+              "<input class='boxsizing' type='text' placeholder='enter your name...' name='login' value='$login' $disabled >";
               echo $bikesearchQuery;
               ?>
-              <button name='bikesearch-login' class="boxsizing" type="submit" value='submit'>login</button>
+              <button name='bikesearch-logout' class="boxsizing lightbluecolor" type="submit" value='logout'
+              <?php echo empty($_SESSION['login']) ? 'disabled="true" style="background-color: #C0C0C0;pointer-events: none;"' : ''; ?>
+              >logout</button>
+              <button name='bikesearch-login' class="boxsizing" type="submit" value='submit'
+              <?php echo empty($_SESSION['login']) ? '' : 'disabled="true" style="background-color: #C0C0C0;pointer-events: none;"'; ?>
+              >login</button>
               <p class='required-text' style='padding-top: 1em;padding-right: 9em;'>
                 <?php
                   //for detecting empty value (search button clicked but query is empty)
@@ -150,7 +175,10 @@
                          session_unset();
                          echo '*name does not exist or not in system';
                       }
-
+                  }
+                  elseif(isset($_POST['bikesearch-logout'])) {
+                      session_destroy();
+                      header("Refresh: 0.1");
                   }
                 ?>
               </p>
@@ -201,7 +229,10 @@
             <h4>Selected Bike</h4>
 
             <?php
+              //global variable
               $currentID = $GLOBALS['selectedBikeId'];
+
+              
 
               if($currentID === null) {
                 echo '<h5 class="center-text" style="padding-top: 3em;">No bike selected...</h5>';
@@ -294,7 +325,8 @@
                       $tableRows = createTableRows($filterArray);
                       $output =
                       "
-                      <div class='scrollfeature-table'>
+                      <!-- each table table row consumes 30px of space -->
+                      <div class='scrollfeature-table' style='height:180px;'>
                         <table class='ei-table'>
 
                           <tr>
@@ -309,6 +341,7 @@
                           <!-- table rows rendered here -->
 
                         </table>
+
                       </div>
                       ";
                   }
@@ -374,6 +407,42 @@
                               return bikeListing::init();
                           }
                       }
+                      function deleteBikeListingById($filename, $idToDelete) {
+                          $result = false;
+                          try {
+                              $file = file($filename);
+                              foreach ($file as $key => $lines) {
+                                  $instance = bikelisting::initUsingFileLines($lines);
+                                  $bikeId = $instance->serialnumber;
+                                  //removing the line
+                                  if($bikeId === $idToDelete) {
+                                     unset($file[$key]);
+                                     break;
+                                  }
+                              }
+                              //reindexing array
+                              $file = array_values($file);
+                              //writing to file
+                              file_put_contents($filename, implode($file));
+                              $result = true;
+                          }
+                          catch (Exception $e) {
+                              $result = false;
+                          }
+                          return $result;
+                      }
+                      //manage any HTTP request here
+                      /* for delete option bikelisting */
+                      if (!empty($_POST['bikelisting-delete'])) {
+                          deleteBikeListingById(DB_BikesforSale,$currentID);
+                          unset($_GET['selectedBikeId']);
+                          unset($GLOBALS['selectedBikeId']);
+                          //refresh UI to update session
+                          //header("Refresh: 0.1");
+                          header("Location: " . CURRENT_FILENAME . "#available-listing");
+                          //refresh UI to update session
+                      }
+
                       //extract data from bikeList
                       $bikeList = $GLOBALS['BikesforSale'];
                       $bikeInfo = findIdInBikeList($currentID,$bikeList);
@@ -426,6 +495,14 @@
                          <div class='price-text-div primarycolor'><p class='price-text'>$price</p></div>
                         </div>
 
+                        <!-- buttons -->
+                        <div>
+                          <form method='post' action='#available-listing' class='removeCSS'>
+                            <button name='bikelisting-delete' class='btn-delete' value='$bikeID'>Delete</button>
+                          </form>
+                        </div>
+                        <!-- buttons -->
+
                         <!-- display interested people -->
                         <div>
                           <p class='title-text text-leftalign'>Individuals Interested in Purchase:</p>
@@ -447,7 +524,7 @@
           <!-- end of selected listing -->
           <!-- start of listing -->
           <div class="flex-child">
-            <h4>Available Listing's</h4>
+            <h4 id='available-listing'>Available Listing's</h4>
             <?php
             //feed bike listing data here
             $bikeList = $GLOBALS['BikesforSale'];

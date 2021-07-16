@@ -22,3 +22,5 @@
 17-951-IBQ,quin,213123,quin@hotmail.com,23
 17-951-IBQ,jia sim,123123,jiasim@hotmail.com,123213
 17-951-IBQ,bella,123213,bella@hotmail.com,123
+17-954-IBQ,Sayyid Iskandar Khan s/o Aslam Khan,90722362,e39914@hotmail.com,12
+17-954-IBQ,jack,1212,1112@hotmail.com,112

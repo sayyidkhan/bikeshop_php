@@ -15,8 +15,19 @@
 
 /*scroll feature for table */
 .scrollfeature-table {
-    height: 250px;
     width: 450px;
     overflow: auto;
     margin-left: -5px;
+    border: 1px solid #dddddd;
+}
+
+/* button for delete */
+.btn-delete {
+  width:100px;
+  height:30px;
+  margin-top:1.25em;
+  margin-bottom:0.5em;
+  background-color:#e84158;
+  color: white;
+  border: 1px solid white;
 }
