@@ -268,5 +268,39 @@ function test_input($data) {
 </body>
 </html>
 
+<?php
 
+if(isset($_POST['submit'])){
+$name = "Name: ".$_POST['name']."
+";
+$phone = "Phone: ".$_POST['phone']."
+";
+$email = "E-mail: ".$_POST['email']."
+";
+$serialnum = "Serial NumBER: ".$_POST['serialnum']."
+";
+$type = "Type: ".$_POST['type']."
+";
+$description = "Description: ".$_POST['description']."
+";
+$year = "Year of Manufacture: ".$_POST['year']."
+";
+$character = "Characteristics: ".$_POST['character']."
+";
+$condition = "Condition: ".$_POST['condition']."
+";
+$file=fopen("BikesforSale.txt", "a");
+fwrite($file, $name);
+fwrite($file, $phone);
+fwrite($file, $email);
+fwrite($file, $serialnum);
+fwrite($file, $type);
+fwrite($file, $description);
+fwrite($file, $year);
+fwrite($file, $character);
+fwrite($file, $condition);
+fwrite($file, "\n");
+fclose($file);
+}
+?>
 
