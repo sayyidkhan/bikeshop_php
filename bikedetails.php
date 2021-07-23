@@ -1,6 +1,26 @@
+<?php
+  include 'classes/bikelisting.php';
+
+  define('CSS_PATH', 'css/'); //define bootstrap css path
+  define('IMG_PATH','./img/'); //define img path
+  $main_css = 'main.css'; // main css filename
+  $flex_css = 'flex.css'; // flex css filename
+
+  define('CURRENT_FILENAME','bikelisting.php'); // filename to define globally
+
+  define('DB_ExpInterest', 'database/ExpInterest.txt'); //filepath to expinterest.txt
+  define('DB_BikesforSale', 'database/BikesforSale.txt'); //filepath to expinterest.txt
+?>
+
 <!DOCTYPE HTML>  
 <html>
 <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Takoko - Bike Shop</title>
+    <!-- main CSS-->
+    <link rel="stylesheet" href='<?php echo (CSS_PATH . "$main_css"); ?>' type="text/css">
+
 <style>
 .error {color: #FF0000;}
 * {
@@ -97,7 +117,21 @@ p {display: block;
   width: 40%;}
 </style>
 </head>
-<body>  
+  <body>
+
+      <div id="wrapper">
+
+        <div id="header">
+          <h1>Takoko</h1>
+          <div id="nav">
+            <ul>
+              <li><a href="index.php">Home</a></li>
+              <li><a href="bikedetails.php">Add Listing</a></li>
+              <li><a href="<?php echo (CURRENT_FILENAME); ?>">Manage Listing</a></li>
+              <li><a href="bikeListing.php">View Listing's</a></li>
+            </ul>
+          </div>
+        </div> 
 
 <?php
 // define variables and set to empty values
