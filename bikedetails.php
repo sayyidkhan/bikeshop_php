@@ -49,7 +49,7 @@ label {
 }
 
 input[type=submit] {
-  background-color: #4CAF50;
+  background-color: DodgerBlue;
   color: white;
   padding: 12px 20px;
   border: none;
@@ -59,7 +59,7 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: primarycolor;
 }
 
 .container {
@@ -70,14 +70,14 @@ input[type=submit]:hover {
 
 
 .col-25 {
-  float: right;
-  width: 25%;
+  float: center;
+  width: 50%;
   margin-top: 6px;
 }
 
 .col-75 {
-  float: right;
-  width: 75%;
+  float: center;
+  width: 50%;
   margin-top: 6px;
 }
 
@@ -92,7 +92,7 @@ input[type=submit]:hover {
 /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
 @media screen and (max-width: 600px) { 
   .col-25, .col-75, input[type=submit] {
-    width: 10%;
+    width: 100%;
     margin-top: 10;
   }
 }
@@ -103,18 +103,20 @@ form {
   margin-right: auto;
   width: 40%;
 }
-
-.center {
-  h2: center;
+h2{
+	color:DodgerBlue;
+	text-align: center;
 }
 h2 {display: block;
   margin-left: auto;
   margin-right: auto;
   width: 40%;}
+  
 p {display: block;
   margin-left: auto;
   margin-right: auto;
   width: 40%;}
+  
 </style>
 </head>
   <body>
