@@ -104,8 +104,8 @@ form {
   width: 40%;
 }
 h2{
-  color:DodgerBlue;
-  text-align: center;
+	color:DodgerBlue;
+	text-align: center;
 }
 h2 {display: block;
   margin-left: auto;
@@ -137,9 +137,9 @@ p {display: block;
 
 <?php
 // define variables and set to empty values
-// name phone email - serialnumber type description - year of manufacture characteristics condition - website
-$nameErr = $phoneErr = $emailErr = $serialnumErr = $typeErr = $descriptionErr = $yearErr = $characterErr = $conditionErr = "";
-$name = $phone = $email = $serialnum = $type = $description = $year = $character = $condition = "";
+// name phone email - serialnumber type description - yearofmanufacture of manufacture characteristics condition - website
+$nameErr = $phoneErr = $emailErr = $titleErr = $serialnumberErr = $typeErr = $descriptionErr = $yearofmanufactureErr = $characteristicsErr = $conditionErr = $priceErr = "";
+$name = $phone = $email = $title = $serialnumber = $type = $description = $yearofmanufacture = $characteristics = $condition = $price = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["name"])) {
@@ -172,14 +172,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
   }
   
-  if (empty($_POST["serialnum"])) {
-    $serialnumErr = "Serial Number is required";
+  if (empty($_POST["title"])) {
+    $typeErr = "Vehicle title is required";
   } else {
-    $serialnum = test_input($_POST["serialnum"]);
+    $title = test_input($_POST["title"]);
     // check if name only contains letters and whitespace
-    if (!preg_match("/^[a-zA-Z0-9]*$/",$serialnum)) {
-      $serialnumErr = "Only letters and numbers allowed";
+    if (!preg_match("/^[a-zA-Z-' ]*$/",$title)) {
+      $titleErr = "Only letters allowed";
     }
+  }
+  
+  if (empty($_POST["serialnumber"])) {
+    $serialnumberErr = "Serial Number is required";
+  } else {
+    $serialnumber = test_input($_POST["serialnumber"]);
+    // check if name only contains letters and whitespace
+    if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-z]{3}]*$/",$serialnumber)) {
+      $serialnumberErr = "Only letters and numbers allowed";
+    } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
   }
   
   if (empty($_POST["type"])) {
@@ -198,26 +208,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $description = test_input($_POST["description"]);
   }
   
-  if (empty($_POST["year"])) {
-    $yearErr = "Year of Manufacture is required";
+  if (empty($_POST["yearofmanufacture"])) {
+    $yearofmanufactureErr = "yearofmanufacture of Manufacture is required";
   } else {
-    $year = test_input($_POST["year"]);
+    $yearofmanufacture = test_input($_POST["yearofmanufacture"]);
     // check if name only contains letters and whitespace
-    if (!preg_match("/^[0-9]*$/",$year)) {
-      $yearErr = "Only numbers allowed";
+    if (!preg_match("/^[0-9]*$/",$yearofmanufacture)) {
+      $yearofmanufactureErr = "Only numbers allowed";
     }
   }
   
-  if (empty($_POST["character"])) {
-    $typeErr = "Characteristics is required";
+  if (empty($_POST["characteristics"])) {
+    $typeErr = "characteristics is required";
   } else {
-    $character = test_input($_POST["character"]);
+    $characteristics = test_input($_POST["characteristics"]);
   }
   
   if (empty($_POST["condition"])) {
     $typeErr = "Vehicle condition is required";
   } else {
     $condition = test_input($_POST["condition"]);
+  }
+  
+  if (empty($_POST["price"])) {
+    $priceErr = "Phone number is required";
+  } else {
+    $price = test_input($_POST["price"]);
+    // check if name only contains letters and whitespace
+    if (!preg_match("/^[0-9]*$/",$price)) {
+      $priceErr = "Only numbers allowed";
+    }
   }
 }
     
@@ -242,8 +262,11 @@ function test_input($data) {
   E-mail:<br><br> <input type="text" name="email" value="<?php echo $email;?>">
   <span class="error">* <?php echo $emailErr;?></span>
   <br><br>
-  Serial Number:<br><br> <input type="text" name="serialnum" value="<?php echo $serialnum;?>">
-  <span class="error">* <?php echo $serialnumErr;?></span>
+  Title:<br><br> <input type="text" name="title" value="<?php echo $title;?>">
+  <span class="error">* <?php echo $titleErr;?></span>
+  <br><br>
+  Serial Number:<br><br> <input type="text" name="serialnumber" value="<?php echo $serialnumber;?>">
+  <span class="error">* <?php echo $serialnumberErr;?></span>
   <br><br>
   Type:<br><br> <input type="text" name="type" value="<?php echo $type;?>">
   <span class="error">* <?php echo $typeErr;?></span>
@@ -251,14 +274,17 @@ function test_input($data) {
   Description:<br><br> <textarea name="description" rows="5" cols="40"><?php echo $description;?></textarea>
   <span class="error">* <?php echo $nameErr;?></span>
   <br><br>
-  Year of Manufacture:<br><br> <input type="number_format" name="year" value="<?php echo $year;?>">
-  <span class="error">* <?php echo $yearErr;?></span>
+  yearofmanufacture of Manufacture:<br><br> <input type="number_format" name="yearofmanufacture" value="<?php echo $yearofmanufacture;?>">
+  <span class="error">* <?php echo $yearofmanufactureErr;?></span>
   <br><br>
-  Character:<br><br> <textarea name="character" rows="5" cols="40"><?php echo $character;?></textarea>
-  <span class="error">* <?php echo $characterErr;?></span>
+  characteristics:<br><br> <textarea name="characteristics" rows="5" cols="40"><?php echo $characteristics;?></textarea>
+  <span class="error">* <?php echo $characteristicsErr;?></span>
   <br><br>
   Condition:<br><br> <textarea name="condition" rows="5" cols="40"><?php echo $condition;?></textarea>
   <span class="error">* <?php echo $conditionErr;?></span>
+  <br><br>
+  Price:<br><br> <input type="number_format" name="price" value="<?php echo $price;?>">
+  <span class="error">* <?php echo $priceErr;?></span>
   <br><br>
   <br><br> <input type="submit" name="submit" value="Submit">  
   <br><br>
@@ -275,15 +301,15 @@ $name = $_POST['name'];
 $phone = $_POST['phone'];
 $email = $_POST['email'];
 $title = 'title';
-$serialnum = $_POST['serialnum'];
+$serialnumber = $_POST['serialnumber'];
 $type = $_POST['type'];
 $description = $_POST['description'];
-$year = $_POST['year'];
-$character = $_POST['character'];
+$yearofmanufacture = $_POST['yearofmanufacture'];
+$characteristics = $_POST['characteristics'];
 $condition = $_POST['condition'];
 $price = "10.00";
 
-$line = "$name,$phone,$email,$title,$serialnum,$type,$description,$year,$character,$condition,price\n";
+$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,price\n";
 
 $file=fopen("BikesforSale.txt", "a");
 fwrite($file, "$line");
