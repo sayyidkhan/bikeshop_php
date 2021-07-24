@@ -112,7 +112,7 @@
           <div id="nav">
             <ul>
               <li><a href="index.php">Home</a></li>
-              <li><a href="bikedetails.php">Add Listing</a></li>
+              <li><a href="addbikelisting.php">Add Listing</a></li>
               <li><a href="<?php echo (CURRENT_FILENAME); ?>">Manage Listing</a></li>
               <li><a href="bikeListing.php">View Listing's</a></li>
             </ul>
