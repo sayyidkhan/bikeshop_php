@@ -177,9 +177,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $serialnum = test_input($_POST["serialnum"]);
     // check if name only contains letters and whitespace
-    if (!preg_match("/^[a-zA-Z0-9]*$/",$serialnum)) {
+    if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-z]{3}]*$/",$serialnum)) {
       $serialnumErr = "Only letters and numbers allowed";
-    }
+    } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
   }
   
   if (empty($_POST["type"])) {
