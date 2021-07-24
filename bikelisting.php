@@ -341,7 +341,7 @@
                       $type = $bikeInfo->type;
                       $characteristics = $bikeInfo->characteristics;
                       $price = $bikeInfo->price;
-                      $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
+                      $imgURL = IMG_PATH . 'bicycle-placeholder.jpeg';
                       $expressInterestForm = expressInterestForm($currentID);
                       $eachBox =
                       "
@@ -409,7 +409,7 @@
                       $title = "$bikeListing->title"  . "   " . "[$condition]";
                       $description = $bikeListing->description;
                       $price = $bikeListing->price;
-                      $imgURL = 'https://www.globalbrandsmagazine.com/wp-content/uploads/2020/05/bicycle-159680_1280.jpg';
+                      $imgURL = IMG_PATH . 'bicycle-placeholder.jpeg';
                       $eachBox =
                       "
                       <div class='flex-bikelisting-child'>
