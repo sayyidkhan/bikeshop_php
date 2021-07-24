@@ -311,7 +311,7 @@ $price = "10.00";
 
 $line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
 
-$file=fopen("database/BikesforSale.txt", "a");
+$file=fopen(DB_BikesforSale, "a");
 fwrite($file, "$line");
 fclose($file);
 }
