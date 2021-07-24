@@ -309,9 +309,9 @@ $characteristics = $_POST['characteristics'];
 $condition = $_POST['condition'];
 $price = "10.00";
 
-$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,price\n";
+$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
 
-$file=fopen("BikesforSale.txt", "a");
+$file=fopen("database/BikesforSale.txt", "a");
 fwrite($file, "$line");
 fclose($file);
 }
