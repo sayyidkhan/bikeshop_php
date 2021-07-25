@@ -117,6 +117,7 @@ p {display: block;
   margin-right: auto;
   width: 40%;}
   
+  
 </style>
 </head>
   <body>
@@ -280,8 +281,11 @@ function test_input($data) {
   characteristics:<br><br> <textarea name="characteristics" rows="5" cols="40"><?php echo $characteristics;?></textarea>
   <span class="error">* <?php echo $characteristicsErr;?></span>
   <br><br>
-  Condition:<br><br> <textarea name="condition" rows="5" cols="40"><?php echo $condition;?></textarea>
-  <span class="error">* <?php echo $conditionErr;?></span>
+  Condition:<select name="condition">
+  <option value="">Select...</option>
+  <option value="new">NEW</option>
+  <option value="used">USED</option>
+  </select>
   <br><br>
   Price:<br><br> <input type="number_format" name="price" value="<?php echo $price;?>">
   <span class="error">* <?php echo $priceErr;?></span>
@@ -291,12 +295,13 @@ function test_input($data) {
 </ul>
 </form>
 
-</body>
-</html>
+
+
 
 <?php
 
 if(isset($_POST['submit'])){
+	echo "<p align='left'> <font color=blue  size='5pt'>The Vehicle details have been successfully submitted</font> </p>";
 $name = $_POST['name'];
 $phone = $_POST['phone'];
 $email = $_POST['email'];
@@ -317,3 +322,31 @@ fclose($file);
 }
 ?>
 
+<?php
+/* set error handler for form submit.
+if(error){
+	echo "<p align='left'> <font color=blue  size='5pt'>Please enter the details correctly.</font> </p>";
+} else{
+	$name = $_POST['name'];
+	$phone = $_POST['phone'];
+	$email = $_POST['email'];
+	$title = 'title';
+	$serialnumber = $_POST['serialnumber'];
+	$type = $_POST['type'];
+	$description = $_POST['description'];
+	$yearofmanufacture = $_POST['yearofmanufacture'];
+	$characteristics = $_POST['characteristics'];
+	$condition = $_POST['condition'];
+	$price = "10.00";
+
+	$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
+
+	$file=fopen(DB_BikesforSale, "a");
+	fwrite($file, "$line");
+	fclose($file);
+	}
+	*/
+?>
+
+</body>
+</html>
