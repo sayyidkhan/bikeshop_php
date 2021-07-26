@@ -167,7 +167,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phoneErr = "Phone number is required";
   } else {
     $phone = test_input($_POST["phone"]);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[0-9]*$/",$phone)) {
       $phoneErr = "Only numbers allowed";
     }
@@ -187,7 +186,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titleErr = "Vehicle title is required";
   } else {
     $title = test_input($_POST["title"]);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[a-zA-Z-' ]*$/",$title)) {
       $titleErr = "Only letters allowed";
     }
@@ -198,7 +196,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
 	  $serialnumber = test_input($_POST["serialnumber"]);
     $yearofmanufacture = test_input($_POST['yearofmanufacture']);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-zA-Z-]{3}]*$/",$serialnumber)) {
       $serialnumberErr = "serial number does not following pattern";
     }
@@ -211,7 +208,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $typeErr = "Vehicle Type is required";
   } else {
     $type = test_input($_POST["type"]);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[a-zA-Z-' ]*$/",$type)) {
       $typeErr = "Only letters allowed";
     }
@@ -227,11 +223,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$yearofmanufactureErr = "year of Manufacture is required";
   } else {
 	$yearofmanufacture = test_input($_POST["yearofmanufacture"]);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[0-9]{4}$/",$yearofmanufacture)) {
 	  $yearofmanufactureErr = "Please enter the correct year of manufacture";
-    } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
-  }// 	  if (value1 == (substr("yearofmanufacture",0,-2)) ) {
+    } 
+  }
   
   
   if (empty($_POST["characteristics"])) {
@@ -250,10 +245,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $priceErr = "Phone number is required";
   } else {
     $price = test_input($_POST["price"]);
-    // check if name only contains letters and whitespace
+    // check if price with numbers and decimal points
     if (!preg_match('/^\\d+(\\.\\d{1,2})?$/D', $price)) {
       $priceErr = "Only numbers allowed";
-    } // preg_match('/^\\d+(\\.\\d{1,2})?$/D', $number) - preg_match("/^[0-9]*$/",$price = working
+    } 
   }
 }
     
@@ -343,11 +338,8 @@ if(isset($_POST['submit'])){
 		} else {  
         echo "<h3> <b>You didn't filled up the form correctly.</b> </h3>";  
 		}  
-	//header("Refresh: 1");
-	//refresh UI to update counter
 	}
-	// $nameErr = $phoneErr = $emailErr = $titleErr = $serialnumberErr = $typeErr = $descriptionErr = $yearofmanufactureErr = $characteristicsErr = $conditionErr = $priceErr = "";
-	// if($nameErr == "" && $phoneErr == "" && $emailErr == "" && $titleErr == "" && $serialnumberErr == "" && $typeErr == "" && $descriptionErr == "" && $yearofmanufactureErr == "" && $characteristicsErr == "" && $conditionErr == "" && $priceErr = "") { 
+	
 
 ?>
 
