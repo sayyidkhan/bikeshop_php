@@ -1,0 +1,4 @@
+zack,98765432,zack@hotmail.com,title,17-309-VGZ,mountain bike,lorem ipsum lorem ipsum lorem ipsum,2018,characteristics1,NEW,10.00
+bella,98765432,bella@hotmail.com,title,17-309-VGK,mountain bike,description,2019,characteristics,,10.00
+bella,98765432,bella@hotmail.com,title,17-309-VGK,mountain bike,description,2019,characteristics,,10.00
+matthew,98765432,matthew@hotmail.com,title,17-428-AXV,mountain bike,lorem ipsum lorem ipsum lorem ipsum lorem ipsum,2017,characteristics2,NEW,10.00
