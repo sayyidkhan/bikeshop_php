@@ -307,27 +307,33 @@ function test_input($data) {
 <?php
 
 if(isset($_POST['submit'])){
-	echo "<p align='left'> <font color=blue  size='5pt'>The Vehicle details have been successfully submitted</font> </p>";
-$name = $_POST['name'];
-$phone = $_POST['phone'];
-$email = $_POST['email'];
-$title = 'title';
-$serialnumber = $_POST['serialnumber'];
-$type = $_POST['type'];
-$description = $_POST['description'];
-$yearofmanufacture = $_POST['yearofmanufacture'];
-$characteristics = $_POST['characteristics'];
-$condition = $_POST['condition'];
-$price = $_POST['price'];
+	if($nameErr == "" && $phoneErr == "" && $emailErr == "" && $titleErr == "" && $serialnumberErr == "" && $typeErr == "" && $descriptionErr == "" && $yearofmanufactureErr == "" && $characteristicsErr == "" && $conditionErr == "" && $priceErr == ""){
+		echo "<p align='left'> <font color=blue  size='5pt'>The Vehicle details have been successfully submitted</font> </p>";
+		$name = $_POST['name'];
+		$phone = $_POST['phone'];
+		$email = $_POST['email'];
+		$title = $_POST['email'];
+		$serialnumber = $_POST['serialnumber'];
+		$type = $_POST['type'];
+		$description = $_POST['description'];
+		$yearofmanufacture = $_POST['yearofmanufacture'];
+		$characteristics = $_POST['characteristics'];
+		$condition = $_POST['condition'];
+		$price = $_POST['price'];
 
-$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
+		$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
 
-$file=fopen(DB_BikesforSale, "a");
-fwrite($file, "$line");
-fclose($file);
-//header("Refresh: 1");
-//refresh UI to update counter
-}
+		$file=fopen(DB_BikesforSale, "a");
+		fwrite($file, "$line");
+		fclose($file);
+		} else {  
+        echo "<h3> <b>You didn't filled up the form correctly.</b> </h3>";  
+		}  
+	//header("Refresh: 1");
+	//refresh UI to update counter
+	}
+	// $nameErr = $phoneErr = $emailErr = $titleErr = $serialnumberErr = $typeErr = $descriptionErr = $yearofmanufactureErr = $characteristicsErr = $conditionErr = $priceErr = "";
+	// if($nameErr == "" && $phoneErr == "" && $emailErr == "" && $titleErr == "" && $serialnumberErr == "" && $typeErr == "" && $descriptionErr == "" && $yearofmanufactureErr == "" && $characteristicsErr == "" && $conditionErr == "" && $priceErr = "") { 
 
 ?>
 
