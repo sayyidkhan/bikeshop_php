@@ -216,9 +216,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $yearofmanufacture = test_input($_POST["yearofmanufacture"]);
     // check if name only contains letters and whitespace
-    if (!preg_match("/^[0-9]*$/",$yearofmanufacture)) {
-      $yearofmanufactureErr = "Only numbers allowed";
-    }
+    if ((substr("serialnumber",0,2)) == (substr("yearofmanufacture",0,-2)) ) {
+      $yearofmanufactureErr = "Please enter the correct year of manufacture";
+    }// !preg_match("/^[0-9]*$/",$yearofmanufacture
   }
   
   if (empty($_POST["characteristics"])) {
@@ -269,7 +269,7 @@ function test_input($data) {
   Title:<br><br> <input type="text" name="title" value="<?php echo $title;?>">
   <span class="error">* <?php echo $titleErr;?></span>
   <br><br>
-  Serial Number:<br><br> The serial number format is 'yy-nnn-ccc' yy-last two digit of Year of Manufacture, n for numbers, c for letters. <br><br> <input type="text" name="serialnumber" value="<?php echo $serialnumber;?>">
+  Serial Number:<br><br> Serial number format is 'yy-nnn-ccc' yy-last two digit of Year of Manufacture, n for numbers, c for letters. <br><br> <input type="text" name="serialnumber" value="<?php echo $serialnumber;?>">
   <span class="error">* <?php echo $serialnumberErr;?></span>
   <br><br>
   Type:<br><br> <input type="text" name="type" value="<?php echo $type;?>">
