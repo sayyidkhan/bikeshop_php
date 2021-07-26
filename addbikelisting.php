@@ -188,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["serialnumber"])) {
     $serialnumberErr = "Serial Number is required";
   } else {
-    $serialnumber = test_input($_POST["serialnumber"]);
+	$serialnumber = test_input($_POST["serialnumber"]);
     // check if name only contains letters and whitespace
     if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-z]{3}]*$/",$serialnumber)) {
       $serialnumberErr = "Only letters and numbers allowed";
@@ -222,13 +222,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   
   if (empty($_POST["characteristics"])) {
-    $typeErr = "characteristics is required";
+    $characteristicsErr = "characteristics is required";
   } else {
     $characteristics = test_input($_POST["characteristics"]);
   }
   
   if (empty($_POST["condition"])) {
-    $typeErr = "Vehicle condition is required";
+    $conditionErr = "Vehicle condition is required";
   } else {
     $condition = test_input($_POST["condition"]);
   }
@@ -238,9 +238,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
     $price = test_input($_POST["price"]);
     // check if name only contains letters and whitespace
-    if (!preg_match("/^[0-9]*$/",$price)) {
+    if (!preg_match('/^\\d+(\\.\\d{1,2})?$/D', $price)) {
       $priceErr = "Only numbers allowed";
-    }
+    } // preg_match('/^\\d+(\\.\\d{1,2})?$/D', $number) - preg_match("/^[0-9]*$/",$price = working
   }
 }
     
@@ -250,6 +250,8 @@ function test_input($data) {
   $data = htmlspecialchars($data);
   return $data;
 }
+header("Refresh: 4");
+
 ?>
 
 <h2>Bike Information</h2>
@@ -316,7 +318,7 @@ $description = $_POST['description'];
 $yearofmanufacture = $_POST['yearofmanufacture'];
 $characteristics = $_POST['characteristics'];
 $condition = $_POST['condition'];
-$price = "10.00";
+$price = $_POST['price'];
 
 $line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
 
