@@ -213,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   
   if (empty($_POST["yearofmanufacture"])) {
-	$yearofmanufactureErr = "yearofmanufacture of Manufacture is required";
+	$yearofmanufactureErr = "year of Manufacture is required";
   } else {
 	$yearofmanufacture = test_input($_POST["yearofmanufacture"]);
     // check if name only contains letters and whitespace
@@ -292,6 +292,7 @@ function test_input($data) {
   <option value="NEW">NEW</option>
   <option value="USED">USED</option>
   </select>
+  <span class="error">* <?php echo $conditionErr;?></span>
   <br><br>
   Price:<br><br> <input type="number_format" name="price" value="<?php echo $price;?>">
   <span class="error">* <?php echo $priceErr;?></span>
