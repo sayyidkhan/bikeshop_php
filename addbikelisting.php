@@ -51,12 +51,14 @@ label {
 input[type=submit] {
   background-color: DodgerBlue;
   color: white;
-  padding: 12px 20px;
-  border: none;
+  width: 50%;
+  padding: 12px;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  cursor: pointer;
-  float: left;
+  resize: vertical;
 }
+
+
 
 input[type=submit]:hover {
   background-color: primarycolor;
@@ -174,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   
   if (empty($_POST["title"])) {
-    $typeErr = "Vehicle title is required";
+    $titleErr = "Vehicle title is required";
   } else {
     $title = test_input($_POST["title"]);
     // check if name only contains letters and whitespace
@@ -273,7 +275,7 @@ function test_input($data) {
   <span class="error">* <?php echo $typeErr;?></span>
   <br><br>
   Description:<br><br> <textarea name="description" rows="5" cols="40"><?php echo $description;?></textarea>
-  <span class="error">* <?php echo $nameErr;?></span>
+  <span class="error">* <?php echo $descriptionErr;?></span>
   <br><br>
   Year of Manufacture:<br><br> <input type="number_format" name="yearofmanufacture" value="<?php echo $yearofmanufacture;?>">
   <span class="error">* <?php echo $yearofmanufactureErr;?></span>
@@ -281,7 +283,7 @@ function test_input($data) {
   characteristics:<br><br> <textarea name="characteristics" rows="5" cols="40"><?php echo $characteristics;?></textarea>
   <span class="error">* <?php echo $characteristicsErr;?></span>
   <br><br>
-  Condition:
+  Condition:<br><br>
   <select name="condition">
   <option value="">Select...</option>
   <option value="NEW">NEW</option>
@@ -295,6 +297,7 @@ function test_input($data) {
   <br><br>
 </ul>
 </form>
+
 
 
 
@@ -322,7 +325,7 @@ fwrite($file, "$line");
 fclose($file);
 
 //refresh UI to update counter
-header("Refresh: 2");
+//header("Refresh: 2");
 }
 
 ?>
