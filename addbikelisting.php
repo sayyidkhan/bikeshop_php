@@ -269,7 +269,7 @@ function test_input($data) {
   Title:<br><br> <input type="text" name="title" value="<?php echo $title;?>">
   <span class="error">* <?php echo $titleErr;?></span>
   <br><br>
-  Serial Number:<br><br> <input type="text" name="serialnumber" value="<?php echo $serialnumber;?>">
+  Serial Number:<br><br> The serial number format is 'yy-nnn-ccc' yy-last two digit of Year of Manufacture, n for numbers, c for letters. <br><br> <input type="text" name="serialnumber" value="<?php echo $serialnumber;?>">
   <span class="error">* <?php echo $serialnumberErr;?></span>
   <br><br>
   Type:<br><br> <input type="text" name="type" value="<?php echo $type;?>">
@@ -325,7 +325,7 @@ if(isset($_POST['submit'])){
 		$file=fopen(DB_BikesforSale, "a");
 		fwrite($file, "$line");
 		fclose($file);
-		echo "<meta http-equiv='refresh' content='5'>";
+		echo "<meta http-equiv='refresh' content='10'>";
 		} else {  
         echo "<h3> <b>You didn't filled up the form correctly.</b> </h3>";  
 		}  
