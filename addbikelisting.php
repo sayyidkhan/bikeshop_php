@@ -191,7 +191,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	$serialnumber = test_input($_POST["serialnumber"]);
     // check if name only contains letters and whitespace
     if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-zA-Z-]{3}]*$/",$serialnumber)) {
-      $serialnumberErr = "Only letters and numbers allowed";
+	  //if (!((substr("serialnumber",0,2)) == (substr("yearofmanufacture",0,-2)))) {
+		$serialnumberErr = "Only letters and numbers allowed";
     } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
   }
   
@@ -212,13 +213,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   
   if (empty($_POST["yearofmanufacture"])) {
-    $yearofmanufactureErr = "yearofmanufacture of Manufacture is required";
+	$yearofmanufactureErr = "yearofmanufacture of Manufacture is required";
   } else {
-    $yearofmanufacture = test_input($_POST["yearofmanufacture"]);
+	$yearofmanufacture = test_input($_POST["yearofmanufacture"]);
     // check if name only contains letters and whitespace
-    if ((substr("serialnumber",0,2)) == (substr("yearofmanufacture",0,-2)) ) {
-      $yearofmanufactureErr = "Please enter the correct year of manufacture";
-    }// !preg_match("/^[0-9]*$/",$yearofmanufacture
+    if (!preg_match("/^[0-9]*$/",$yearofmanufacture)) {
+		if ((substr("serialnumber",0,2)) != (substr("yearofmanufacture",0,-2))) {
+			$yearofmanufactureErr = "Please enter the correct year of manufacture";
+    } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
+  }// 	  if (value1 == (substr("yearofmanufacture",0,-2)) ) {
   }
   
   if (empty($_POST["characteristics"])) {
