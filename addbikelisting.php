@@ -242,7 +242,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $priceErr = "Only numbers allowed";
     } // preg_match('/^\\d+(\\.\\d{1,2})?$/D', $number) - preg_match("/^[0-9]*$/",$price = working
   }
-  //header("Refresh: 10");
 }
     
 function test_input($data) {
@@ -326,11 +325,11 @@ if(isset($_POST['submit'])){
 		$file=fopen(DB_BikesforSale, "a");
 		fwrite($file, "$line");
 		fclose($file);
-		
+		echo "<meta http-equiv='refresh' content='5'>";
 		} else {  
         echo "<h3> <b>You didn't filled up the form correctly.</b> </h3>";  
 		}  
-	//header("Refresh: 10");
+	//header("Refresh: 1");
 	//refresh UI to update counter
 	}
 	// $nameErr = $phoneErr = $emailErr = $titleErr = $serialnumberErr = $typeErr = $descriptionErr = $yearofmanufactureErr = $characteristicsErr = $conditionErr = $priceErr = "";
