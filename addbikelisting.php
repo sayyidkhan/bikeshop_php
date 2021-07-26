@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
 	$serialnumber = test_input($_POST["serialnumber"]);
     // check if name only contains letters and whitespace
-    if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-z]{3}]*$/",$serialnumber)) {
+    if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-zA-Z-]{3}]*$/",$serialnumber)) {
       $serialnumberErr = "Only letters and numbers allowed";
     } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
   }
@@ -242,7 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $priceErr = "Only numbers allowed";
     } // preg_match('/^\\d+(\\.\\d{1,2})?$/D', $number) - preg_match("/^[0-9]*$/",$price = working
   }
-  header("Refresh: 5");
+  //header("Refresh: 10");
 }
     
 function test_input($data) {
@@ -313,7 +313,7 @@ if(isset($_POST['submit'])){
 		$phone = $_POST['phone'];
 		$email = $_POST['email'];
 		$title = $_POST['email'];
-		$serialnumber = $_POST['serialnumber'];
+		$serialnumber = strtolower($_POST['serialnumber']);
 		$type = $_POST['type'];
 		$description = $_POST['description'];
 		$yearofmanufacture = $_POST['yearofmanufacture'];
@@ -326,10 +326,11 @@ if(isset($_POST['submit'])){
 		$file=fopen(DB_BikesforSale, "a");
 		fwrite($file, "$line");
 		fclose($file);
+		
 		} else {  
         echo "<h3> <b>You didn't filled up the form correctly.</b> </h3>";  
 		}  
-	//header("Refresh: 1");
+	//header("Refresh: 10");
 	//refresh UI to update counter
 	}
 	// $nameErr = $phoneErr = $emailErr = $titleErr = $serialnumberErr = $typeErr = $descriptionErr = $yearofmanufactureErr = $characteristicsErr = $conditionErr = $priceErr = "";
