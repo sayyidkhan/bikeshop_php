@@ -275,16 +275,17 @@ function test_input($data) {
   Description:<br><br> <textarea name="description" rows="5" cols="40"><?php echo $description;?></textarea>
   <span class="error">* <?php echo $nameErr;?></span>
   <br><br>
-  yearofmanufacture of Manufacture:<br><br> <input type="number_format" name="yearofmanufacture" value="<?php echo $yearofmanufacture;?>">
+  Year of Manufacture:<br><br> <input type="number_format" name="yearofmanufacture" value="<?php echo $yearofmanufacture;?>">
   <span class="error">* <?php echo $yearofmanufactureErr;?></span>
   <br><br>
   characteristics:<br><br> <textarea name="characteristics" rows="5" cols="40"><?php echo $characteristics;?></textarea>
   <span class="error">* <?php echo $characteristicsErr;?></span>
   <br><br>
-  Condition:<select name="condition">
+  Condition:
+  <select name="condition">
   <option value="">Select...</option>
-  <option value="new">NEW</option>
-  <option value="used">USED</option>
+  <option value="NEW">NEW</option>
+  <option value="USED">USED</option>
   </select>
   <br><br>
   Price:<br><br> <input type="number_format" name="price" value="<?php echo $price;?>">
@@ -319,33 +320,11 @@ $line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanu
 $file=fopen(DB_BikesforSale, "a");
 fwrite($file, "$line");
 fclose($file);
+
+//refresh UI to update counter
+header("Refresh: 2");
 }
-?>
 
-<?php
-/* set error handler for form submit.
-if(error){
-	echo "<p align='left'> <font color=blue  size='5pt'>Please enter the details correctly.</font> </p>";
-} else{
-	$name = $_POST['name'];
-	$phone = $_POST['phone'];
-	$email = $_POST['email'];
-	$title = 'title';
-	$serialnumber = $_POST['serialnumber'];
-	$type = $_POST['type'];
-	$description = $_POST['description'];
-	$yearofmanufacture = $_POST['yearofmanufacture'];
-	$characteristics = $_POST['characteristics'];
-	$condition = $_POST['condition'];
-	$price = "10.00";
-
-	$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
-
-	$file=fopen(DB_BikesforSale, "a");
-	fwrite($file, "$line");
-	fclose($file);
-	}
-	*/
 ?>
 
 </body>
