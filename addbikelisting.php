@@ -283,8 +283,8 @@ function test_input($data) {
   <br><br>
   Condition:<select name="condition">
   <option value="">Select...</option>
-  <option value="new">NEW</option>
-  <option value="used">USED</option>
+  <option value="NEW">NEW</option>
+  <option value="USED">USED</option>
   </select>
   <br><br>
   Price:<br><br> <input type="number_format" name="price" value="<?php echo $price;?>">
@@ -320,32 +320,7 @@ $file=fopen(DB_BikesforSale, "a");
 fwrite($file, "$line");
 fclose($file);
 }
-?>
 
-<?php
-/* set error handler for form submit.
-if(error){
-	echo "<p align='left'> <font color=blue  size='5pt'>Please enter the details correctly.</font> </p>";
-} else{
-	$name = $_POST['name'];
-	$phone = $_POST['phone'];
-	$email = $_POST['email'];
-	$title = 'title';
-	$serialnumber = $_POST['serialnumber'];
-	$type = $_POST['type'];
-	$description = $_POST['description'];
-	$yearofmanufacture = $_POST['yearofmanufacture'];
-	$characteristics = $_POST['characteristics'];
-	$condition = $_POST['condition'];
-	$price = "10.00";
-
-	$line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanufacture,$characteristics,$condition,$price\n";
-
-	$file=fopen(DB_BikesforSale, "a");
-	fwrite($file, "$line");
-	fclose($file);
-	}
-	*/
 ?>
 
 </body>

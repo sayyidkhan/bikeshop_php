@@ -1,2 +1,0 @@
-zack,98765432,zack@hotmail.com,title,abc123,bike,description,2017,characteristics,new,10.00
-bella,98765432,zack@hotmail.com,title,abc124,bike,description,2017,characteristics,new,10.00
