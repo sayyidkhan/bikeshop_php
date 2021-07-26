@@ -242,6 +242,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       $priceErr = "Only numbers allowed";
     } // preg_match('/^\\d+(\\.\\d{1,2})?$/D', $number) - preg_match("/^[0-9]*$/",$price = working
   }
+  header("Refresh: 5");
 }
     
 function test_input($data) {
@@ -250,7 +251,6 @@ function test_input($data) {
   $data = htmlspecialchars($data);
   return $data;
 }
-header("Refresh: 4");
 
 ?>
 
@@ -325,9 +325,8 @@ $line = "$name,$phone,$email,$title,$serialnumber,$type,$description,$yearofmanu
 $file=fopen(DB_BikesforSale, "a");
 fwrite($file, "$line");
 fclose($file);
-
+//header("Refresh: 1");
 //refresh UI to update counter
-//header("Refresh: 2");
 }
 
 ?>
