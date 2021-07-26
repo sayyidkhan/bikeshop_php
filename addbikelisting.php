@@ -112,7 +112,15 @@ h2{
 h2 {display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 40%;}
+  width: 100%;}
+h3{
+	color:DodgerBlue;
+	text-align: center;
+}
+h3 {display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;}
   
 p {display: block;
   margin-left: auto;
