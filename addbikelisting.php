@@ -188,13 +188,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   if (empty($_POST["serialnumber"])) {
     $serialnumberErr = "Serial Number is required";
   } else {
-	$serialnumber = test_input($_POST["serialnumber"]);
+	  $serialnumber = test_input($_POST["serialnumber"]);
+    $yearofmanufacture = test_input($_POST['yearofmanufacture']);
     // check if name only contains letters and whitespace
     if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-zA-Z-]{3}]*$/",$serialnumber)) {
-	  if ((substr("serialnumber",0,2)) != (substr("yearofmanufacture",0,-2))) {
-		$serialnumberErr = "the first two digits of serial number does not match with year of manufacture";
-    } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
-  }}
+      $serialnumberErr = "serial number does not following pattern";
+    }
+    if ((substr($serialnumber,0,2)) != substr($yearofmanufacture,2,4)) {
+      $serialnumberErr = "the first two digits of serial number does not match with year of manufacture";
+    }
+  }
   
   if (empty($_POST["type"])) {
     $typeErr = "Vehicle Type is required";
@@ -217,7 +220,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
 	$yearofmanufacture = test_input($_POST["yearofmanufacture"]);
     // check if name only contains letters and whitespace
-    if (!preg_match("/^[0-9]*$/",$yearofmanufacture)) {
+    if (!preg_match("/^[0-9]{4}$/",$yearofmanufacture)) {
 	  $yearofmanufactureErr = "Please enter the correct year of manufacture";
     } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
   }// 	  if (value1 == (substr("yearofmanufacture",0,-2)) ) {
