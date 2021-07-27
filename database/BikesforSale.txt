@@ -1,2 +1,4 @@
-krishna,00000000,email@gmail.com,title,19-000-uio,car,kkkk,1919,kkkkkk,NEW,10.00
-krishna,00000000,email@gmail.com,title,19-000-uio,car,kkkk,1919,kkkkkk,NEW,10.00
+zack,98765432,zack@hotmail.com,zack@hotmail.com,17-572-kex,mountain bike,description,2017,characteristics1,NEW,250
+zack,98765432,zack@hotmail.com,zack@hotmail.com,17-309-vgz,mountain bike,lorem ipsum lorem ipsum lorem ipsum,2017,characteristics1,NEW,250
+bella,98765432,bella@hotmail.com,bella@hotmail.com,18-508-pfy,mountain bike,lorem ipsum lorem ipsum lorem ipsum,2018,characteristics1,NEW,300
+matthew,98765432,matthew@hotmail.com,matthew@hotmail.com,20-508-pfy,mountain bike,lorem ipsum lorem ipsum lorem ipsum,2020,characteristics1,USED,150

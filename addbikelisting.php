@@ -6,8 +6,6 @@
   $main_css = 'main.css'; // main css filename
   $flex_css = 'flex.css'; // flex css filename
 
-  define('CURRENT_FILENAME','bikelisting.php'); // filename to define globally
-
   define('DB_ExpInterest', 'database/ExpInterest.txt'); //filepath to expinterest.txt
   define('DB_BikesforSale', 'database/BikesforSale.txt'); //filepath to expinterest.txt
 ?>
@@ -131,8 +129,8 @@ p {display: block;
           <div id="nav">
             <ul>
               <li><a href="index.php">Home</a></li>
-              <li><a href="bikedetails.php">Add Listing</a></li>
-              <li><a href="<?php echo (CURRENT_FILENAME); ?>">Manage Listing</a></li>
+              <li><a href="addbikelisting.php">Add Listing</a></li>
+              <li><a href="managelisting.php">Manage Listing</a></li>
               <li><a href="bikeListing.php">View Listing's</a></li>
             </ul>
           </div>
@@ -179,9 +177,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titleErr = "Vehicle title is required";
   } else {
     $title = test_input($_POST["title"]);
-    // check if name only contains letters and whitespace
-    if (!preg_match("/^[a-zA-Z-' ]*$/",$title)) {
-      $titleErr = "Only letters allowed";
+    // check if name is empty 
+    if (empty($_POST["title"])) {
+      $titleErr = "Title cannot be empty";
     }
   }
   
@@ -336,9 +334,7 @@ if(isset($_POST['submit'])){
 		}  
 	//header("Refresh: 1");
 	//refresh UI to update counter
-	}
-	// $nameErr = $phoneErr = $emailErr = $titleErr = $serialnumberErr = $typeErr = $descriptionErr = $yearofmanufactureErr = $characteristicsErr = $conditionErr = $priceErr = "";
-	// if($nameErr == "" && $phoneErr == "" && $emailErr == "" && $titleErr == "" && $serialnumberErr == "" && $typeErr == "" && $descriptionErr == "" && $yearofmanufactureErr == "" && $characteristicsErr == "" && $conditionErr == "" && $priceErr = "") { 
+	} 
 
 ?>
 
