@@ -2,3 +2,4 @@ zack,98765432,zack@hotmail.com,zack@hotmail.com,17-572-kex,mountain bike,descrip
 zack,98765432,zack@hotmail.com,zack@hotmail.com,17-309-vgz,mountain bike,lorem ipsum lorem ipsum lorem ipsum,2017,characteristics1,NEW,250
 bella,98765432,bella@hotmail.com,bella@hotmail.com,18-508-pfy,mountain bike,lorem ipsum lorem ipsum lorem ipsum,2018,characteristics1,NEW,300
 matthew,98765432,matthew@hotmail.com,matthew@hotmail.com,20-508-pfy,mountain bike,lorem ipsum lorem ipsum lorem ipsum,2020,characteristics1,USED,150
+beckam,98765432,beckam@hotmail.com,beckam@hotmail.com,15-100-abc,mountain bike,description 1,2015,characteristics 1,USED,100.50
