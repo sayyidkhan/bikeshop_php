@@ -110,7 +110,15 @@ h2{
 h2 {display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 40%;}
+  width: 100%;}
+h3{
+	color:DodgerBlue;
+	text-align: center;
+}
+h3 {display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;}
   
 p {display: block;
   margin-left: auto;
@@ -157,7 +165,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $phoneErr = "Phone number is required";
   } else {
     $phone = test_input($_POST["phone"]);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[0-9]*$/",$phone)) {
       $phoneErr = "Only numbers allowed";
     }
@@ -188,7 +195,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   } else {
 	  $serialnumber = test_input($_POST["serialnumber"]);
     $yearofmanufacture = test_input($_POST['yearofmanufacture']);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[[0-9]{2}-[0-9]{3}-[a-zA-Z-]{3}]*$/",$serialnumber)) {
       $serialnumberErr = "serial number does not following pattern";
     }
@@ -201,7 +207,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $typeErr = "Vehicle Type is required";
   } else {
     $type = test_input($_POST["type"]);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[a-zA-Z-' ]*$/",$type)) {
       $typeErr = "Only letters allowed";
     }
@@ -214,14 +219,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   }
   
   if (empty($_POST["yearofmanufacture"])) {
-	$yearofmanufactureErr = "yearofmanufacture of Manufacture is required";
+	$yearofmanufactureErr = "year of Manufacture is required";
   } else {
 	$yearofmanufacture = test_input($_POST["yearofmanufacture"]);
-    // check if name only contains letters and whitespace
     if (!preg_match("/^[0-9]{4}$/",$yearofmanufacture)) {
 	  $yearofmanufactureErr = "Please enter the correct year of manufacture";
-    } // \d{2}-\d{3}-[a-z]{3} - a-zA-Z0-9
-  }// 	  if (value1 == (substr("yearofmanufacture",0,-2)) ) {
+    } 
+  }
   
   
   if (empty($_POST["characteristics"])) {
@@ -240,10 +244,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $priceErr = "Phone number is required";
   } else {
     $price = test_input($_POST["price"]);
-    // check if name only contains letters and whitespace
+    // check if price with numbers and decimal points
     if (!preg_match('/^\\d+(\\.\\d{1,2})?$/D', $price)) {
       $priceErr = "Only numbers allowed";
-    } // preg_match('/^\\d+(\\.\\d{1,2})?$/D', $number) - preg_match("/^[0-9]*$/",$price = working
+    } 
   }
 }
     
@@ -293,6 +297,7 @@ function test_input($data) {
   <option value="NEW">NEW</option>
   <option value="USED">USED</option>
   </select>
+  <span class="error">* <?php echo $conditionErr;?></span>
   <br><br>
   Price:<br><br> <input type="number_format" name="price" value="<?php echo $price;?>">
   <span class="error">* <?php echo $priceErr;?></span>
@@ -334,7 +339,9 @@ if(isset($_POST['submit'])){
 		}  
 	//header("Refresh: 1");
 	//refresh UI to update counter
-	} 
+	}
+	// $nameErr = $phoneErr = $emailErr = $titleErr = $serialnumberErr = $typeErr = $descriptionErr = $yearofmanufactureErr = $characteristicsErr = $conditionErr = $priceErr = "";
+	// if($nameErr == "" && $phoneErr == "" && $emailErr == "" && $titleErr == "" && $serialnumberErr == "" && $typeErr == "" && $descriptionErr == "" && $yearofmanufactureErr == "" && $characteristicsErr == "" && $conditionErr == "" && $priceErr = "") { 
 
 ?>
 
